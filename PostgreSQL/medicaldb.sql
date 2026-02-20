@@ -1,5 +1,4 @@
 -- PostgreSQL Script for Python --
--- Create Database (Run Separately if needed)
 -- CREATE DATABASE medical_management;
 -- Connect to database 
 -- \v medical_management;
@@ -21,7 +20,7 @@ CREATE TABLE patients (
     gender VARCHAR(10) CHECK (gender IN ('male', 'female', 'other')),
     date_of_birth DATE,
     contact_number VARCHAR(15),
-    email VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
     address TEXT,
     blood_group VARCHAR(3) CHECK (blood_group IN ('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-')),
     registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -35,7 +34,7 @@ CREATE TABLE doctors (
     phone_number VARCHAR(15),
     email VARCHAR(100),
     consultation_fee DECIMAL(10, 2),
-    joined_at DATE,
+    joined_at DATE
 );
 
 -- 4. Appointments
@@ -44,7 +43,6 @@ CREATE TABLE appointments (
     patient_id INT NOT NULL,
     doctor_id INT NOT NULL, 
     appointment_date TIMESTAMP NOT NULL,
-    appointment_time TIME NOT NULL,
     status VARCHAR(20) CHECK (status IN ('scheduled', 'completed', 'cancelled')) DEFAULT 'scheduled',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_patient 
@@ -67,6 +65,7 @@ CREATE TABLE medical_records (
     prescription TEXT,
     notes TEXT,
     visit_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_patient_record 
         FOREIGN KEY (patient_id) 
             REFERENCES patients(patient_id) 
@@ -74,7 +73,7 @@ CREATE TABLE medical_records (
     CONSTRAINT fk_doctor_record 
         FOREIGN KEY (doctor_id) 
             REFERENCES doctors(doctor_id) 
-            ON DELETE CASCADE,
+            ON DELETE CASCADE
 );
 
 -- 6. Billing
@@ -93,8 +92,7 @@ CREATE TABLE billing (
     CONSTRAINT fk_appointment_bill 
         FOREIGN KEY (appointment_id) 
             REFERENCES appointments(appointment_id) 
-            ON DELETE CASCADE,
-            ON DELETE CASCADE,
+            ON DELETE SET NULL
 );
 
 -- 7. Medicines 
@@ -124,7 +122,7 @@ CREATE TABLE prescriptions (
     CONSTRAINT fk_medicine_prescription 
         FOREIGN KEY (medicine_id) 
             REFERENCES medicines(medicine_id) 
-            ON DELETE CASCADE,
+            ON DELETE CASCADE
 );
 
 
