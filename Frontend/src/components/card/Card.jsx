@@ -14,3 +14,4 @@ function Card({ title, value, icon, bgColor }) {
 };
 
 export default Card;
+
