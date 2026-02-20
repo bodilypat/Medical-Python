@@ -38,7 +38,7 @@ const Pharmacy = () => {
         const medicineData = {
             name: form.name.value,
             quantity: form.quantity.value,
-            price: form.price.value
+            price: form.price.value,
             expiry_date: form.expiry_date.value
         };
 
@@ -97,7 +97,7 @@ const Pharmacy = () => {
                 onClick={() => {
                     setEditMedicine(null);
                     setShowModal(true);
-                }
+                }}
             >
                 Add Medicine
             </button>
