@@ -13,3 +13,5 @@ class NotFoundException(HTTPException):
 class ForbiddenException(HTTPException):
     def __init__(self, detail: str = "Operation not permitted"):
         super().__init__(status_code=status.HTTP_403_FORBIDDEN, detail=detail)
+
+        
