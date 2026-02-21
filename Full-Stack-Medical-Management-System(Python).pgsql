@@ -12,20 +12,20 @@ backend/
 │   │   └── exceptions.py
 │   ├── api/
 │   │   ├── deps.py
-│   │   ├── v1/
-│   │   │   ├── api.py
-│   │   │   └── endpoints/
-│   │   │       ├── auth.py
-│   │   │       ├── users.py
-│   │   │       ├── patients.py
-│   │   │       ├── doctors.py
-│   │   │       ├── appointments.py
-│   │   │       ├── medical_records.py
-│   │   │       ├── billing.py
-│   │   │       ├── pharmacy.py
-│   │   │       ├── lab.py
-│   │   │       └── reports.py
-│   │   │  
+│   │   └── v1/
+│   │       ├── api.py
+│   │       └── endpoints/
+│   │           ├── auth.py
+│   │           ├── users.py
+│   │           ├── patients.py
+│   │           ├── doctors.py
+│   │           ├── appointments.py
+│   │           ├── medical_records.py
+│   │           ├── billing.py
+│   │           ├── pharmacy.py
+│   │           ├── labTest.py
+│   │           └── reports.py
+│   │     
 │   ├── models/
 │   │   ├── base.py
 │   │   ├── user.py
