@@ -1,197 +1,79 @@
-#app/api/v1/routes/paatients.py
+#app/api/v1/endpoints/patients.py
 
-from typing import List 
-from fastai import FastAPI, APIRouter, HTTPException, status, Query
+from fastapi import APIRouter, HTTPException, Depends, status
 from sqlalchemy.orm import Session
+from typing import List
 
-from app.database import get_db
-from app.schemas.patients import (
-        PatientCreate,
-        PatientUpdate,
-        PatientResponse,
-        PatientDetail,
-    )
-from app.services import patient_service as PatientService
-from app.core.dependencies import (
-    get_current_user,
-    requrires_roles,
-    doctor_owns_patient,
-)
-from app.core.constants import UserRoles 
+from app.api.deps import get_db, require_role, get_current_user
+from app.core.database import get_db
+from app.schemas.patient import PatientCreate, PatientResponse, PatientUpdate
+from app.services.patient_service import PatientService
 from app.models.user import User
 
-router = APIRouter(prefix="/patients", tags=["Patients"])
+router = APIRouter()
 
-#-----------------------------------------
-# Create Patient (Admin / Doctor)
-#-----------------------------------------
+# Create Patient (Admin / Staff)
 @router.post(
-    "/",
-    response_model=PatientResponse,
+    "/", 
+    response_model=PatientResponse, 
     status_code=status.HTTP_201_CREATED,
-    dependencies=[requrires_roles([UserRoles.ADMIN, UserRoles.DOCTOR])],
 )
 def create_patient(
-    patient: PatientCreate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    patient_in: PatientCreate, 
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(require_role(["admin", "staff"]))
 ):
-    """
-    Create a new patient record.
-    Accessible by Admin and Doctor roles.
-    Args:
-        patient (PatientCreate): Patient creation data.
-        db (Session): Database session.
-        current_user (User): Currently authenticated user.
-    Returns:
-        PatientResponse: The created patient record.
-    """
-    return PatientService.create_patient(
-        db=db, 
-        patient=patient_info,
-        current_user=current_user.id,
-    )
-
-#-----------------------------------------
-# Get Patient By ID (Admin / Assigned Doctor)
-#-----------------------------------------
-@router.get(
-    "/{patient_id}",
-    response_model=PatientDetail,
-    dependencies=[requrires_roles([UserRoles.ADMIN, UserRoles.DOCTOR])],
-)
-def get_patient_by_id(
-    patient_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    """
-    Get a patient by ID.
-    Accessible by Admin and Doctor roles.
-    Args:
-        patient_id (int): The ID of the patient to retrieve.
-        db (Session): Database session.
-        current_user (User): Currently authenticated user.
-    Returns:
-        PatientDetail: The retrieved patient details.
-    """
-    patient = PatientService.get_patient_by_id(db, patient_id)
-    if not patient:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Patient not found",
-        )
+    patient_service = PatientService(db)
+    patient = patient_service.create_patient(patient_in)
     return patient
 
-#-----------------------------------------
-# List Patients (Admin = all, Doctor = assigned only)
-#-----------------------------------------
-@router.get(
-    "/",
-    response_model=List[PatientResponse],
-    status_code=status.HTTP_200_OK,
-    dependencies=[requrires_roles([UserRoles.ADMIN, UserRoles.DOCTOR])],
-)
-def list_patients(
-    skip: int = Query(0, ge=0),
-    limit: int = Query(10, ge=1, le=100),
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+# Get All Patients (Admin / Staff / Doctor)
+@router.get("/", response_model=List[PatientResponse])
+def get_patients(
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(require_role(["admin", "staff", "doctor"]))
 ):
-    """
-    List patients with pagination.
-    Admins see all patients; Doctors see only their assigned patients.
-    Args:
-        skip (int): Number of records to skip for pagination.
-        limit (int): Maximum number of records to return.
-        db (Session): Database session.
-        current_user (User): Currently authenticated user.
-    Returns:
-        List[PatientResponse]: List of patient records.
-    """
-    if current_user.role == UserRoles.ADMIN:
-        return PatientService.get_patients(
-            db=db,
-            skip=skip,
-            limit=limit,
-        )
-    return PatientService.get_patients_by_doctor(
-        db=db,
-        doctor_id=current_user.id,
-        skip=skip,
-        limit=limit,
-    )
+    patient_service = PatientService(db)
+    patients = patient_service.get_patients()
+    return patients
 
-#-----------------------------------------
-# Update Patient (Admin / Assigned Doctor)
-#-----------------------------------------
-@router.put(
-    "/{patient_id}",
-    response_model=PatientResponse,
-    dependencies=[
-        requrires_roles([UserRoles.ADMIN, UserRoles.DOCTOR]),
-        doctor_owns_patient,
-    ],
-)
+# Get Patient by ID (Admin / Staff / Doctor)
+@router.get("/{patient_id}", response_model=PatientResponse)
+def get_patient(
+    patient_id: int, 
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(require_role(["admin", "staff", "doctor"]))
+):
+    patient_service = PatientService(db)
+    patient = patient_service.get_patient(patient_id)
+    if not patient:
+        raise HTTPException(status_code=404, detail="Patient not found")
+    return patient
+
+# Update Patient (Admin / Staff)
+@router.put("/{patient_id}", response_model=PatientResponse)
 def update_patient(
-    patient_id: int,
-    patient_update: PatientUpdate,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    patient_id: int, 
+    patient_in: PatientUpdate, 
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(require_role(["admin", "staff"]))
 ):
-    """
-    Update a patient's information.
-    Accessible by Admin and the assigned Doctor.
-    Args:
-        patient_id (int): The ID of the patient to update.
-        patient_update (PatientUpdate): Patient update data.
-        db (Session): Database session.
-        current_user (User): Currently authenticated user.
-    Returns:
-        PatientResponse: The updated patient record.
-    """
-    patient = PatientService.get_patient_by_id(db, patient_id)
+    patient_service = PatientService(db)
+    patient = patient_service.update_patient(patient_id, patient_in)
     if not patient:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Patient not found",
-        )
-    return PatientService.update_patient(
-        db=db,
-        patient_id=patient_id,
-        patient_update=patient_update,
-    )
-#-----------------------------------------
-# Delete Patient (Admin / Assigned Doctor)
-#-----------------------------------------
-@router.delete(
-    "/{patient_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[
-        requrires_roles([UserRoles.ADMIN, UserRoles.DOCTOR]),
-        doctor_owns_patient,
-    ],
-)
-def delete_patient(
-    patient_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    """
-    Delete a patient record.
-    Accessible by Admin and the assigned Doctor.
-    Args:
-        patient_id (int): The ID of the patient to delete.
-        db (Session): Database session.
-        current_user (User): Currently authenticated user.
-    Returns:
+        raise HTTPException(status_code=404, detail="Patient not found")
+    return patient  
 
-    """
-    patient = PatientService.get_patient_by_id(db, patient_id)
-    if not patient:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Patient not found",
-        )
-    PatientService.delete_patient(db=db, patient_id=patient_id)
+# Delete Patient (Admin)
+@router.delete("/{patient_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_patient(
+    patient_id: int, 
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(require_role("admin"))
+):
+    patient_service = PatientService(db)
+    success = patient_service.delete_patient(patient_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Patient not found")
     return None
+

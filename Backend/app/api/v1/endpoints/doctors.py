@@ -1,116 +1,91 @@
-#app/api/v1/routes/doctors.py
+#app/api/v1/endpoints/doctors.py
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, Depends, status, Query
 from sqlalchemy.orm import Session
+from typing import List, Optional
 
-from app.database import get_db
-from app.schemas.dependencies import get_current_user, require_role
-from app.core.constants import UserRole
+from app.api.deps import get_current_user, require_role
+from app.core.database import get_db
+from app.schemas.doctor import DoctorCreate, DoctorUpdate, DoctorResponse
+from app.services.doctor_service import DoctorService
+from app.models import User
 
 router = APIRouter()
 
-# Create Doctor(Admin only)
+# Create Doctor (Admin Only)
 @router.post(
-    "/",
-    response_model=DoctorResponse,
-    dependencies=[Depends(require_role([UserRole.ADMIN]))],
-    status_code=status.HTTP_201_CREATED,
+    "/", 
+    response_model=DoctorResponse, 
+    status_code=status.HTTP_201_CREATED
 )
 def create_doctor(
     doctor: DoctorCreate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    db_doctor = DoctorService.create_doctor(db, doctor)
-    return db_doctor
+    if not require_role(current_user, "admin"):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
+    return DoctorService.create_doctor(db, doctor)
 
-# Get Doctor by ID (Admin and Doctor themselves)
+# Get All Doctors (Authenticated Users)
 @router.get(
-    "/{doctor_id}",
-    response_model=DoctorResponse,
-    dependencies=[Depends(get_current_user)],
+        "/", 
+        response_model=List[DoctorResponse]
 )
-def get_doctor(
+def get_all_doctors(
+    db: Session = Depends(get_db),
+    specialty: Optional[str] = Query(None, description="Filter by specialty"),
+    current_user: User = Depends(get_current_user)
+):
+    return DoctorService.get_all_doctors(db, specialty=specialty)
+
+# Get Doctor by ID (Authenticated Users)
+@router.get(
+    "/{doctor_id}", 
+    response_model=DoctorResponse
+)
+def get_doctor_by_id(
     doctor_id: int,
-    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    if current_user.role != UserRole.ADMIN and current_user.id != doctor_id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to access this resource")
-    
-    db_doctor = DoctorService.get_doctor_by_id(db, doctor_id)
-    if not db_doctor:
+    doctor = DoctorService.get_doctor_by_id(db, doctor_id)
+    if not doctor:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Doctor not found")
-    return db_doctor
+    return doctor
 
-# List Doctors (Public / Patient)
-@router.get(
-    "/",
-    response_model=List[DoctorResponse],
-    dependencies=[Depends(get_current_user)],
-)
-def list_doctors(
-    db: Session = Depends(get_db),
-):
-    doctors = DoctorService.list_doctors(db)
-    return doctors
-
-# Update Doctor (Admin only)
+# Update Doctor (Admin Only)
 @router.put(
-    "/{doctor_id}",
-    response_model=DoctorResponse,
-    dependencies=[Depends(require_role([UserRole.ADMIN]))],
+    "/{doctor_id}", 
+    response_model=DoctorResponse
 )
 def update_doctor(
     doctor_id: int,
     doctor_update: DoctorUpdate,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    db_doctor = DoctorService.update_doctor(db, doctor_id, doctor_update)
-    if not db_doctor:
+    if not require_role(current_user, "admin"):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
+    doctor = DoctorService.update_doctor(db, doctor_id, doctor_update)
+    if not doctor:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Doctor not found")
-    return db_doctor
+    return doctor
 
-# Delete Doctor (Admin only)
+# Delete Doctor (Admin Only)
 @router.delete(
-    "/{doctor_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(require_role([UserRole.ADMIN]))],
+    "/{doctor_id}", 
+    status_code=status.HTTP_204_NO_CONTENT
 )
 def delete_doctor(
     doctor_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
+    if not require_role(current_user, "admin"):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
     success = DoctorService.delete_doctor(db, doctor_id)
     if not success:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Doctor not found")
-    return
-
-# Get Doctors by Availability (Public / Patient)
-@router.get(
-    "/availability/{available}",
-    response_model=List[DoctorResponse],
-    dependencies=[Depends(get_current_user)],
-)
-def get_doctors_by_availability(
-    available: bool,
-    db: Session = Depends(get_db),
-):
-    doctors = DoctorService.get_doctors_by_availability(db, available)
-    return doctors
-
-# View Doctor Availability Calendar (Public / Patient)
-@router.get(
-    "/{doctor_id}/availability",
-    response_model=DoctorAvailabilityResponse,
-    dependencies=[Depends(get_current_user)],
-)
-def view_doctor_availability(
-    doctor_id: int,
-    db: Session = Depends(get_db),
-):
-    availability = DoctorService.get_doctor_availability(db, doctor_id)
-    if availability is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Doctor not found")
-    return availability
-
+    return None
 

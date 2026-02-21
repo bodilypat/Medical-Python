@@ -1,225 +1,122 @@
-# app/v1/routes/appointments.py 
+#app/api/v1/endpoints/appointments.py
 
-from typing import List 
-
-from fastapi import (
-    APIRouter, 
-    Depends, 
-    HTTPException, 
-    status,
-    BackgroundTasks,
-)
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
+from types import List,  Optional
+from datetime import datetime
 
-from app.database import get_db
-from app.schemas.appointment import (
-    AppointmentCreate,
-    AppointmentResponse,
-    AppointmentUpdate,
-    AppointmentFilter,
-    AppointmentStatusUpdate,
-)
-from app.services import appointment_service as AppointmentService
-from app.core.dependencies import get_current_user,require_roles 
-from app.core.constants import UserRoles
+from app.api.v1.deps import get_current_user, require_role
+from app.core.database import get_db
+from app.schemas.appointments import AppointmentCreate, AppointmentUpdate, AppointmmentResponse
+from app.models import User
+from app.services.appointment_service import AppointmentService
 
-router = APIRouter(
-    prefix="/appointments",
-    tags=["Appointments"],
-)   
+router = APIRouter()
 
-#-------------------------------------
-# Book an Appointment (Patient)
-#-------------------------------------
+# Create Appointment (Staff / Admin)
 @router.post(
     "/",
-    response_model=AppointmentResponse,
-    status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(require_roles([UserRoles.PATIENT]))],
-    summary="Book an Appointment",
-    description="Allows a patient to book a new appointment.",
+    response_model=AppointmmentResponse,
+    status_code=status.HTTP_201_CREATED
 )
-def book_appointment(
-    appointment: AppointmentCreate,
-    background_tasks: BackgroundTasks = None,
-    db: Session = Depends(get_db),
-    current_user=Depends(get_current_user),
+def create_appointment(
+    appointment: AppointmentCreate, 
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(get_current_user)
 ):
-    try:
-        new_appointment = AppointmentService.create_appointment(
-            db=db,
-            appointment=appointment,
-            patient_id=current_user.id,
-            background_tasks=background_tasks,
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
-        )
+    require_role(current_user, ["admin", "staff"])
     
-    # Scheduling remainder email (non-blocking)
-    background_tasks.add_task(
-        Appointment_service.send_appointment_remainder,
-        new_appointment.id,
-    )
+    # Validate appointment time
+    if appointment.appointment_time < datetime.now():
+        raise HTTPException(status_code=400, detail="Appointment time must be in the future")
+    
+    new_appointment = AppointmentService.create_appointment(db, appointment)
     return new_appointment
 
-#-------------------------------------
-# Update Appointment Status (Doctor)
-#-------------------------------------
-@router.put(
-    "/{appointment_id}/status",
-    response_model=AppointmentResponse,
-    dependencies=[Depends(require_roles([UserRoles.DOCTOR]))],
-    summary="Update Appointment Status",
-    description="Allows a doctor to update the status of an appointment.",
-)
-def update_appointment_status(
-    appointment_id: int,
-    status_update: AppointmentStatusUpdate,
-    db: Session = Depends(get_db),
-    current_user=Depends(get_current_user),
-):
-    appointment = AppointmentService.update_appointment_status(
-        db=db,
-        appointment_id=appointment_id,
-        doctor_id=current_user.id,
-        status=status_update.status,
-    )
-
-    if appointment is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Appointment not found or access denied.",
-        )
-    return appointment
-
-#-------------------------------------
-# Reschedule or Cancel Appointment (Patient)
-#-------------------------------------
-@router.put(
-    "/{appointment_id}",
-    response_model=AppointmentResponse,
-    dependencies=[Depends(require_roles([UserRoles.PATIENT]))],
-    summary="Reschedule or Cancel Appointment",
-    description="Allows a patient to reschedule or cancel an appointment.",
-)
-def reschedule_or_cancel_appointment(
-    appointment_id: int,
-    appointment__update: AppointmentUpdate,
-    db: Session = Depends(get_db),
-    current_user=Depends(get_current_user),
-):
-    appointment = AppointmentService.reschedule_or_cancel_appointment(
-        db=db,
-        appointment_id=appointment_id,
-        update_data=appointment_update,
-        patient_id=current_user.id,
-    )
-    if appointment is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Appointment not found or access denied.",
-        )
-    return appointment
-
-#-------------------------------------
-# Cancel Appointment (Patient)
-#-------------------------------------
-@router.delete(
-    "/{appointment_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(require_roles([UserRoles.PATIENT]))],
-    summary="Cancel Appointment",
-    description="Allows a patient to cancel an appointment.",
-)
-def cancel_appointment(
-    appointment_id: int,
-    db: Session = Depends(get_db),
-    current_user=Depends(get_current_user),
-):
-    success = AppointmentService.cancel_appointment(
-        db=db,
-        appointment_id=appointment_id,
-        patient_id=current_user.id,
-    )
-    if not success:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Appointment not found or access denied.",
-        )
-    return None
-
-#-------------------------------------
-# Get Appointments (Patient & Doctor)
-#-------------------------------------
+# Get All Appointments (Authenticated Users)
 @router.get(
     "/",
-    response_model=List[AppointmentResponse],
-    summary="Get Appointments",
-    description="Retrieve a list of appointments for the current user with optional filters.",
+    response_model=List[AppointmmentResponse]
 )
 def get_appointments(
-    filters: AppointmentFilter = Depends(),
-    db: Session = Depends(get_db),
-    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(get_current_user),
+    skip: int = 0, 
+    limit: int = Query(10, le=100)
 ):
-    appointments = AppointmentService.get_appointments(
-        db=db,
-        user_id=current_user.id,
-        user_role=current_user.role,
-        filters=filters,
-    )
+    if current_user.role == "doctor":
+        appointments = AppointmentService.get_appointments_by_doctor(db, current_user.user_id, skip, limit)
+    elif current_user.role == "staff":
+        appointments = AppointmentService.get_appointments_by_patient(db, current_user.user_id, skip, limit)
+    else:
+        appointments = AppointmentService.get_all_appointments(db, skip, limit)
+    
     return appointments
-#-------------------------------------
-# Get Appointment Details (Patient & Doctor)
+
+
+# Get Appointment By ID
 @router.get(
-    "/{appointment_id}",
-    response_model=AppointmentResponse,
-    summary="Get Appointment Details",
-    description="Retrieve details of a specific appointment.",
-)   
-def get_appointment_details(
-    appointment_id: int,
-    db: Session = Depends(get_db),
-    current_user=Depends(get_current_user),
+    "/{appointment_id}", 
+    response_model=AppointmmentResponse
+)
+def get_appointment(
+    appointment_id: int, 
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(get_current_user)
 ):
-    appointment = AppointmentService.get_appointment_details(
-        db=db,
-        appointment_id=appointment_id,
-        user_id=current_user.id,
-        user_role=current_user.role,
-    )
-    if appointment is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Appointment not found or access denied.",
-        )
+    appointment = AppointmentService.get_appointment_by_id(db, appointment_id)
+    if not appointment:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    # Authorization check
+    if current_user.role == "doctor" and appointment.doctor_id != current_user.user_id:
+        raise HTTPException(status_code=403, detail="Not authorized to view this appointment")
+    if current_user.role == "staff" and appointment.patient_id != current_user.user_id:
+        raise HTTPException(status_code=403, detail="Not authorized to view this appointment")
+    
     return appointment
 
-#-------------------------------------
-# Calendar-Based Time Slots 
-#-------------------------------------
-@router.get(
-    "/available-slots/",
-    response_model=List[str],
-    summary="Get Available Time Slots",
-    description="Retrieve available time slots for booking appointments based on calendar data.",
+
+# Update Appointment (Staff / Admin)
+@router.put(
+    "/{appointment_id}", 
+    response_model=AppointmmentResponse
 )
-def get_available_time_slots(
-    date: str,
-    db: Session = Depends(get_db),
+def update_appointment(
+    appointment_id: int, 
+    appointment_update: AppointmentUpdate, 
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(get_current_user)
 ):
-    try:
-        available_slots = AppointmentService.get_available_time_slots(
-            db=db,
-            date=date,
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e),
-        )
-    return available_slots
+    require_role(current_user, ["admin", "staff"])
+    
+    appointment = AppointmentService.get_appointment_by_id(db, appointment_id)
+    if not appointment:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    # Validate new appointment time
+    if appointment_update.appointment_time and appointment_update.appointment_time < datetime.now():
+        raise HTTPException(status_code=400, detail="Appointment time must be in the future")
+    
+    updated_appointment = AppointmentService.update_appointment(db, appointment, appointment_update)
+    return updated_appointment
+
+# Delete Appointment (Admin Only)
+@router.delete(
+    "/{appointment_id}", 
+    status_code=status.HTTP_204_NO_CONTENT
+)
+def delete_appointment(
+    appointment_id: int, 
+    db: Session = Depends(get_db), 
+    current_user: User = Depends(get_current_user)
+):
+    require_role(current_user, ["admin"])
+    
+    appointment = AppointmentService.get_appointment_by_id(db, appointment_id)
+    if not appointment:
+        raise HTTPException(status_code=404, detail="Appointment not found")
+    
+    AppointmentService.delete_appointment(db, appointment)
+    return None
 

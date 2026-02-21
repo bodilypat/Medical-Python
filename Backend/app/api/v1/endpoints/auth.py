@@ -1,70 +1,56 @@
-# app/api/v1/endpoints/auth.py
+#app/api/v1/endpoints/auth.py
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-
-from app.databse import get_db
-from app.schemas.auth import UserLogin, Token
-from app.services.auth_service import AuthService
-from app.core.security import create_access_token, create_refresh_token
-from app.core.dependencies import get_current_user 
+from app.schemas import UserLogin, Token
+from app.models.user import User
+from app.code.database import get_db
+from app.core.security import verify_password, create_access_token
 
 router = APIRouter()
 
-# Login Endpoint 
-@router.post(
-    "/login", 
-    response_model=Token,
-    status_code=status.HTTP_200_OK,
-    summary="User Login",
-    description="Authenticate user and return access and refresh tokens."
-)
-def login(
-    credentials: UserLogin, 
-    db: Session = Depends(get_db),
-    auth_service: AuthService = Depends(AuthService),
-):
-    """
-    Authenticate user and return access and refresh tokens.
-    """
-    user = auth_service.authenticate_user(db, credentials.email, credentials.password)
-
-    if not user:
+@router.post("/login", response_model=Token)
+def login(user_login: UserLogin, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == user_login.username).first()
+    if not user or not verify_password(user_login.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password",
+            detail="Invalid username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    access_token = create_access_token(data={"sub": user.username, "role": user.role})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@router.post("/register", response_model=Token)
+def register(user_login: UserLogin, db: Session = Depends(get_db)):
+    existing_user = db.query(User).filter(User.username == user_login.username).first()
+    if existing_user:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already registered")
     
-    access_token = create_access_token(
-        data={"sub": str(user.email)," roles": user.roles}
+    new_user = User(
+        username=user_login.username,
+        password_hash=verify_password(user_login.password),
+        role="staff"  # Default role, can be changed by admin later
     )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
 
-    refresh_token = create_refresh_token(
-        data={"sub": str(user.email)," roles": user.roles}
-    )
-    return Token(access_token=access_token, refresh_token=refresh_token, token_type="bearer")
+    access_token = create_access_token(data={"sub": new_user.username, "role": new_user.role})
+    return {"access_token": access_token, "token_type": "bearer"}
 
-# Refresh Token Endpoint
-@router.post(
-    "/refresh", 
-    response_model=Token,
-    status_code=status.HTTP_200_OK,
-    summary="Refresh Access Token",
-    description="Refresh access token using a valid refresh token."
-)
-def refresh_token(
-    current_user=Depends(get_current_user)
-):
-    """
-    Refresh access token using a valid refresh token.
-    """
-    access_token = create_access_token(
-        data={"sub": str(current_user.email), "roles": current_user.roles}
-    )
-
-    refresh_token = create_refresh_token(
-        data={"sub": str(current_user.email), "roles": current_user.roles}
-    )
+@router.post("/change-password")
+def change_password(current_user: User = Depends(get_current_user), new_password: str = None, db: Session = Depends(get_db)):
+    if not new_password:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="New password is required")
     
-    return Token(access_token=access_token, refresh_token=refresh_token, token_type="bearer")
+    current_user.password_hash = verify_password(new_password)
+    db.commit()
+    return {"message": "Password changed successfully"}
+
+@router.post("/logout")
+def logout():
+    # In a real application, you would handle token revocation here
+    return {"message": "Successfully logged out"}
+
+
