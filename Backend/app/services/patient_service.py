@@ -1,54 +1,129 @@
-#app/services/patient_service.py
+#File: app/services/patient_service.py 
 
-from sqlalchemy.orm import Session
-from app.models.patient import Patient
-from app.schemas.patient import PatientCreate, PatientUpdate, PatientResponse
-from app.core.exceptions import NotFoundException
+from uuid import UUID 
+
+from app.repositories.patient_repository import PatientRepository 
+from app.schemas.patient import (
+    PatientCreate,
+    PatientUpdate,
+    PatientStatusUpdate,
+)
 
 class PatientService:
 
-    @staticmethod
-    def create_patient(db: Session, patient_data: PatientCreate) -> PatientResponse:
-        new_patient = Patient(
-            name=patient_data.name,
-            date_of_birth=patient_data.date_of_birth,
-            gender=patient_data.gender,
-            phone=patient_data.phone,
-            email=patient_data.email,
-            address=patient_data.address
-        )
-        db.add(new_patient)
-        db.commit()
-        db.refresh(new_patient)
-        return PatientResponse.from_orm(new_patient)
-    
-    @staticmethod
-    def get_patient(db: Session, patient_id: int) -> PatientResponse:
-        patient = db.query(Patient).filter(Patient.patient_id == patient_id).first()
-        if not patient:
-            raise NotFoundException("Patient not found")
-        return PatientResponse.from_orm(patient)
-    
-    @staticmethod
-    def update_patient(db: Session, patient_id: int, patient_data: PatientUpdate) -> PatientResponse:
-        patient = db.query(Patient).filter(Patient.patient_id == patient_id).first()
-        if not patient:
-            raise NotFoundException("Patient not found")
-        
-        for key, value in patient_data.dict(exclude_unset=True).items():
-            setattr(patient, key, value)
-        
-        db.commit()
-        db.refresh(patient)
-        return PatientResponse.from_orm(patient)
-    
-    @staticmethod
-    def delete_patient(db: Session, patient_id: int) -> None:
-        patient = db.query(Patient).filter(Patient.patient_id == patient_id).first()
-        if not patient:
-            raise NotFoundException("Patient not found")
-        
-        db.delete(patient)
-        db.commit()
+    def __init__(self, respository: PatientRepository):
+        self.repository = self.repository
 
+    async def create_patient(
+        self,
+        payload: PatientCreate,
+    ): 
+        """
+        Create new patient.
+        """
+        return await self.repository.create(paylaod)
+    
+    async def get_patients(
+        self,
+        page: int,
+        size: int,
+        search: str | None,
+        gender: str | None,
+        blood_group: str | None,
+        status: str | None,
+    ):
+        return await self.repository.get_all(
+            page=page,
+            size=size,
+            search=search,
+            gender=gender,
+            blood_group=blood_group,
+            status=status,
+        )
+    
+    async def get_patients_by_id (
+        self,
+        patient_id: UUID,
+    ):
+        patient = await self.repository.get_by_id(patient_id)
+
+        if patient is None:
+            raise PatientNotFound()
         
+        return patient 
+    
+    async def update_patient(
+        self,
+        patient_id: UUID,
+        payload: PatientUpdate,
+    ):
+        patient = await self.repository.get_by_id(patient_id)
+
+        if patient is None:
+            raise PatientNotFound()
+        
+        return await self.repository.update(
+            patient,
+            payload,
+        )
+    
+    async def update_patient_status(
+        self,
+        patient_id: UUID,
+        status: str,
+    ):
+        patient = await self.repository.get_by_id(patient_id)
+
+        if patient is None:
+            raise PatientNotFound()
+        
+        return await self.repository.update_status(
+            patient,
+            status,
+        )
+    
+    async def delete_patient(
+        self,
+        patient_id: UUID,
+    ):
+        patient = await self.repository.get_by_id(patient_id)
+
+        if patient is None:
+            raise PatientNotFound() 
+        
+        return await self.repository.update_status(
+            patient,
+            status,
+        )
+    
+    async def delete_patient(
+        self,
+        patient_id: UUID,
+    ):
+        patient = await self.repository.get_by_id(patient_id)
+
+        if patient is None:
+            raise PatientNotFound()
+        
+        await self.repository.delete(patient)
+
+    async def get_patient_appointment(
+        self,
+        patient_id: UUID,
+    ):
+        return await self.repository.get_appointment(patient_id)
+        
+    async def get_patient_prescriptions(
+        self,
+        patient_id: UUID,
+    ):
+        return await self.repository.get_prescriptions(patient_id)
+    
+    async def get_patient_laboratory_report(
+        self,
+        patient_id: UUID,
+    ): 
+        return await self.repository.get_billing(patient_id)
+    
+
+    
