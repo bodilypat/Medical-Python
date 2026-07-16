@@ -1,34 +1,17 @@
-#app/schemas/doctor.py
+# backend/app/schemas/doctor.py
 
-from pydantic import BaseModel, EmailStr
-from typing import Optional
-from datetime import date
+from pydantic import BaseModel
+from typing import Optiona, List 
 
-class DoctorBase(BaseModel):
-    first_name: str
-    last_name: str
-    specialization: Optional[str]
-    phone_number: Optional[str]
-    email: Optional[EmailStr]
-    consultation_fee: Optional[float]
-    joined_at: Optional[date]
+class DoctorBase(BaseModel)
+	name: str
+	specialization: str
+	phone: str 
 
-class DoctorCreate(DoctorBase):
-    pass
-
-class DoctorUpdate(DoctorBase):
-    first_name: Optional[str]
-    last_name: Optional[str]
-    specialization: Optional[str]
-    phone_number: Optional[str]
-    email: Optional[EmailStr]
-    consultation_fee: Optional[float]
-    joined_at: Optional[date]
-
-class Doctor(DoctorBase):
-    doctor_id: int
-
-    class Config:
-        orm_mode = True
-
-        
+class DoctorCreate(DoctorBase)
+	available_day: List[str] 
+	
+class DoctorOut(DoctorBase)
+	id: str
+	available_days: List[str]
+	
