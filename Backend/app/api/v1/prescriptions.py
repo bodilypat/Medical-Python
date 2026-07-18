@@ -25,9 +25,13 @@ router = APIRouter()
 )
 async def create_prescription(
     payload: PrescriptionCreate,
-    current_user=Depends(get_current_user),
+    service: PrescriptionService = Depends(get_prescription_service),
+    current_user: User =Depends(get_current_user),
 ):
-    return await PrescriptionService.create_prescription(payload)
+    return await service.create_presciption(
+        payload,
+        current_user=current_user,
+    )
 
 @router.get(
     "/",
