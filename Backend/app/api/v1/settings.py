@@ -1,190 +1,200 @@
-#File: app/api/v1/settings.py 
+#==============================================
+# File: app/api/v1/setting.py
+#==============================================
 
-from fastapi import APIRouter, Depends, status 
+from uuid import UUID 
 
-from app.core.dedpendencies import (
-    get_current_user,
-    require_admin,
+from fastapi import (
+    APIRouter,
+    Depends,
+    Query,
+    Fath,
+    status,
 )
-from app.schemas.settings import(
-    HospitalSettingsUpdate,
-    HospitalSettingsReponse,
-    SystemSettingsUpdate,
-    SystemSetingsResponse,
-    UserPreferenceUpdate,
-    UserPreferenceResponse,
+
+from app.core.dependencies import get_current_user 
+from app.schemas.settings import (
+    UserSettingsResponse,
+    UserSettingsUpdate,
+    UserPasswordRequest,
+    NotificationSettingsReponse,
     NotificationSettingsUpdate,
-    NotificationSettingsResponse,
-    SecuritySettingsUpdate,
-    SecuritySettingsResponse,
+    SystemSettingsReponse,
+    SystemSettingsUpdate,
+    RolePermissionResponse,
 )
-
 from app.services.settings_service import SettingsService 
 
-router = APIRouter()
+router = APIRouter(
+    prefix = "/settings",
+    tags=["Settigns"]
+)
 
 #----------------------------------------------
-# Hospital Settings
+# USER SETTING
 #----------------------------------------------
+
 @router.get(
-    "/hospital",
-    response_model=HospitalSettingsReponse,
-    summary="Get Hospital Settings",
+    "/user",
+    response_model=UserSettingsResponse,
+    summary="Get User Settings",
 )
-async def get_hospital_settings(
+async def get_user_settings(
     current_user=Depends(get_current_user),
 ):
-    return await SettiingService.get_hospital_settings()
-
-@router.put(
-    "/hospital",
-    response_model=HospitalSettingsReponse,
-    summary="Update Hospital Settings",
-)
-async def update_hospital_settings(
-    payload: HospitalSettingsUpdate,
-    current_user=Depends(require_admin),
-):
-    return await SettingsService.update_hospital_settings(payload)
-
-#----------------------------------------------
-# System Setting 
-#----------------------------------------------
-@router.get(
-    "/system",
-    response_model=SystemSetingsResponse,
-    summary="Get System Settings",
-)
-async def get_system_settings(
-    current_user=Depends(require_admin),
-):
-    return await SettingsService.get_system_settings()
-
-@router.put(
-    "/system",
-    response_model=SystemSettingsUpdate,
-    summary="Update System Settings",
-)
-async def update_system_settings(
-    payload: SystemSettingsUpdate,
-    current_user=Depends(require_admin),
-):
-    return await SettingsService.update_system_settings(paylaod)
-
-#----------------------------------------------
-# User Preferences 
-#----------------------------------------------
-@router.get(
-    "/preferences",
-    response_model=UserPreferenceResponse,
-    summary="Get User Preferences",
-)
-async def get_user_preferences(
-    current_user=Depends(get_current_user),
-):
-    return await SettingsService.get_user_preference(
-        current_user.id
+    
+    return await SettingsService.get_user_settings(
+        user_id=current_user.id 
     )
 
 @router.put(
-    "/preferences",
-    response_model=UserPreferenceResponse,
-    summary="Update User Preferences"
+    "/user"
+    response_model=UserSettingsResponse,
+    summary="Update User Settigns",
 )
-async def update_user_prefences(
-    payload: UserPreferenceUpdate,
+async def update_user_settings(
+    payload: UserSettingsUpdate,
     current_user=Depends(get_current_user)
-):
-    return await SettingsService.update_user_preferences(
-        current_user.id,
-        payload,
+): 
+    
+    return await SettingsService.update_user_settings(
+        user_id=current_user.id,
+        payload=payloady,
     )
 
 #----------------------------------------------
-# Notification Settings
+# PASSWORD SETTINGS
 #----------------------------------------------
-@router.get(
-    "/notifications",
-    response_model=NotificationSettingsResponse,
-    summary="Update User Preferences",
+
+@router.patch(
+    "/password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Change Password",
 )
-async def update_user_preferences(
-    payload: UserPreferenceUpdate,
+async def change_password(
+    payload: ChangePasswordRequest,
     current_user=Depends(get_current_user),
 ):
-    return await SettingsService.update_user_preferences(
-        current_user.id,
-        payload,
+    
+    await SettingsService.change_password(
+        user_id=current_user.idd,
+        payload=payload,
     )
 
 #----------------------------------------------
-# Notification Setting 
+# NOTIFICATION SETTINGS
 #----------------------------------------------
+
+@router.get(
+    "notifications",
+    response_model=NotificationSettingsReponse,
+    summary="Get Notification Settings",
+)
+async def get_notification_settings(
+    current_user=Depends(get_current_user),
+):
+    
+    return await SettingsService.get_notification_settings(
+        user_id=current_user.id
+    )
+
 @router.put(
-    "/notifications",
-    response_model=NotificationSettingsResponse,
+    "/notification",
+    response_model=NotificationSettingsReponse,
     summary="Update Notification Settings",
 )
 async def update_notification_settings(
-    payload: NotificationSettingsUpdate,
+    payload:NotificationSettingsUpdate,
     current_user=Depends(get_current_user),
 ):
+    
     return await SettingsService.update_notification_settings(
-        current_user.id,
-        payload
+        user_id=current_user.id,
+        payload=payload,
     )
 
 #----------------------------------------------
-# Security Settings
+# SYSTEM SETTINGS 
 #----------------------------------------------
+
 @router.get(
-    "/security",
-    response_model=SecuritySettingsResponse,
-    summary="Get Security Settings",
+    "/system",
+    response_model=SysetemSettingsResponse,
+    summary="Get System Settings",
 )
-async def get_security_settings(
+async def get_system_settings(
     current_user=Depends(get_current_user),
 ):
-    return await SettingsService.get_security_settings(
-        current_user.id
+    return await SettingsService.get_system_settings(
+        current_user=current_user.id
+    ) 
+
+@router.put(
+    "/system",
+    response_model=SystemSettingsReponse,
+    summary="Update System Settings",
+)
+async def update_system_settings(
+    payload=SystemSettingsUpdate,
+    current_user=Depends(get_current_user),
+):
+    return await SettingsService.update_system_settings(
+        current_user=current_user.id,
+        payload=payload,
+    )
+
+#----------------------------------------------
+# ROLES & PERMISSIONS
+#----------------------------------------------
+
+@router.get(
+    "/roles/{role-id}/permissions",
+    response_model=RolePermissionResponse,
+    summary="Get Role Permissions",
+)
+async def get_role_permissions(
+    role_id: UUID = Path(...),
+    current_user=Depends(get_current_user),
+):
+
+    return await SettingsService.get_role_permissions(
+        current_user=current_user.id,
+        role_id=role_id,
     )
 
 @router.put(
-    "/security",
-    reponse_model=SecuritySettingsResponse,
-    summary="Update Security Settings",
+    "/roles/{role_id}/permissions",
+    repsonse_mode=RolePermissionResponse,
+    summary="Update Role Permissions",
 )
-async def update_security_settings(
-    payload: SecuritySettingsUpdate,
+async def update_role_permissions(
+    role_id: UUID,
+    permissions: list[UUID],
     current_user=Depends(get_current_user),
 ):
-    return await SettingsService.update_security_settings(
-        current_user.id,
-        payload,
+    
+    return await SettingsService.update_role_permissions(
+        current_user=current_user.id,
+        rold_id=role_id,
+        permissions=permissions,
     )
 
 #----------------------------------------------
-# Cache 
+# AUDIT SETTINGS 
 #----------------------------------------------
-@router.post(
-    "/cache/clear",
-    status_code=status.HTTP_200_OK,
-)
-async def clear_cache(
-    current_user=Depends(require_admin),
-): 
-    return await SettingsService.clear_cache()
 
-#----------------------------------------------
-# System Health
-#----------------------------------------------
 @router.get(
-    "/health",
-    summary="System Health",
+    "/audit",
+    summary="System Audit Logs",
 )
-async def system_health(
-    current_user=Depends(require_admin),
+async def audit_logs(
+    page: int = Query(1, ge=1),
+    size: int = Query(20, ge=1, le=100),
+    current_user=Depends(get_current_user),
 ):
-    return await SettingsService.system_health()
-
+    return await SettingsService.get_audit_logs(
+        current_user=current_user.id,
+        page=page,
+        size=size,
+    )
 
