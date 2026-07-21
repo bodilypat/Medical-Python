@@ -1,124 +1,159 @@
-#File: app/apii/v1/reports.py
+#File: app/api/v1/reports.py 
 
-from datetime import data 
-
+from datetime import date 
 from fastapi import APIRouter, Depends, Query
-
-from app.core.dependencies import get_current_user
-from app.schemas.report import (
+from app.core.dependencies import get_current_user 
+from app.schemas.report import(
     DashboardReportResponse,
     PatientReportResponse,
-    AppointmentReportReaponse,
-    BillingReportResponse,
+    AppointmentReportResponse,
+    BiillingReportResponse,
     LaboratoryReportResponse,
-    PharmaacyReportResponse,
+    PharmacyReportResponse,
+)
+from app.service.report_service import ReportService 
+
+router = APIRouter(
+    prefix="/reports",
+    tags=["Reports"]
 )
 
-from app.services.report_service import ReportService 
-
-router = APIRouter()
+#----------------------------------------------
+# DASHBOARD REPORT 
+#----------------------------------------------
 
 @router.get(
-    "/dashboard",
+    "dashboard",
     response_model=DashboardReportResponse,
     summary="Dashboard Report",
 )
-async def dashboard_report(
+async def dasboard_report(
     start_date: date | None = Query(None),
     end_date: date | None = Query(None),
-    current_user=Depends(get_current_user),
+    current_user=Depends(get_current_user)
 ):
     return await ReportService.dashboard_report(
         start_date=start_date,
         end_date=end_date,
+        current_user=current_user,
     )
 
+#----------------------------------------------
+# PATIENT REPORT 
+#----------------------------------------------
+
 @router.get(
-    "/patients",
+    "/paitents",
     response_model=PatientReportResponse,
-    summary="Patient Report",
+    summary="Patient Report"
 )
 async def patient_report(
     start_date: date | None = Query(None),
     end_date: date | None = Query(None),
-    current_user=Depends(get_current_user),
+    current_user=Depends(get_current_user)
 ):
     return await ReportService.patient_report(
         start_date=start_date,
         end_date=end_date,
+        current_user=current_user
     )
 
+#----------------------------------------------
+# APPOINTMENT REPORT 
+#----------------------------------------------
+
 @router.get(
-    "/appointments",
-    response_model=AppointmentReportReaponse,
-    summary="Appointment Report",
+    "/apppointments",
+    response_model=AppointmentReportResponse,
+    summary="Appointment Report"
 )
 async def appointment_report(
-    start_date: date | None = Query(None),
-    ende_date: date | None = (None),
+    start_date: date | None = Qeury(None),
+    end_date: date | None = Query(None),
     doctor_id: str | None = Query(None),
-    current_user=Depends(get_current_user),
+    current_user=Depends(get_current_user)
 ):
     return await ReportService.appointment_report(
         start_date=start_date,
-        end_date=ende_date,
+        end_date=end_date,
         doctor_id=doctor_id,
+        current_user=current_user,
     )
 
-@routet.get(
+#----------------------------------------------
+# BILLING REPORT 
+#----------------------------------------------
+
+@router.get(
     "/billing",
-    response_model=BillingReportResponse,
-    summary="Billing Report"
+    response_mode=BillingReportResponse,
+    summary="Billing Report",
 )
 async def billing_report(
     start_date: date | None = Query(None),
     end_date: date | None = Query(None),
     current_user=Depends(get_current_user),
-): 
+):
+    
     return await ReportService.billing_report(
         start_date=start_date,
         end_date=end_date,
+        current_user=current_user,
     )
+
+#----------------------------------------------
+# LABORATORY REPORT
+#----------------------------------------------
 
 @router.get(
     "/laboratory",
-    respose_model=LaboratoryReportResponse,
-    summary="Laboratory Report",
+    response_model=LaboratoryReportResponse,
+    summary="Laboratory Report"
 )
 async def laboratory_report(
     start_date: date | None = Query(None),
     end_date: date | None = Query(None),
     current_user=Depends(get_current_user)
 ):
-    return await ReportService.laboratory(
+    return await ReportService.laboratory_report(
         start_date=start_date,
         end_date=end_date,
+        current_user=current_user,
     )
+
+#----------------------------------------------
+# PHARMACY REPORT
+#----------------------------------------------
 
 @router.get(
     "/pharmacy",
-    reponse_model=PharmaacyReportResponse,
+    response_model=PharmacyReportResponse,
     summary="Pharmacy Report",
 )
 async def pharmacy_report(
     start_date: date | None = Query(None),
     end_date: date | None = Query(None),
-    current_user=Depends(get_current_user),
+    current_user=Depends(get_current_user)
 ):
-    return await ReportService.pharmacy(
+    return await ReportService.pharmacy_report(
         start_date=start_date,
         end_date=end_date,
+        current_user=current_user,
     )
 
+#----------------------------------------------
+# EXPROT PDF 
+#----------------------------------------------
+
 @router.get(
-    "/export/pdf",
+    '/export/pdf',
     summary="Export Report as PDF",
 )
 async def export_pdf(
     report: str = Query(...),
     start_date: date | None = Query(None),
     end_date: date | None = Query(None),
-    current_user=Depends(get_current_user),
+    current_user=Depends(get_current_user)
 ):
     return await ReportService.export_pdf(
         report=report,
@@ -126,36 +161,45 @@ async def export_pdf(
         end_date=end_date,
     )
 
-@router.gt(
+#----------------------------------------------
+# Export Excel 
+#----------------------------------------------
+
+@router.get(
     "/export/excel",
     summary="Export Report as Excel",
 )
 async def export_excel(
     report: str = Query(...),
     start_date: date | None = Query(None),
-    end_date: data | None = Query(None),
+    end_date: date | None = Query(None),
     current_user=Depends(get_current_user),
 ):
     return await ReportService.export_excel(
         report=report,
         start_date=start_date,
         end_date=end_date,
+        current_user=current_user,
     )
 
+#----------------------------------------------
+# EXPORT CSV
+#----------------------------------------------
+
 @router.get(
-    "/export/csv",
-    summary="Export Report as CSV",
+    "/exports/csv",
+    summary="Export Report",
 )
 async def export_csv(
-    report: str | Query(...),
+    report: str = Query(...),
     start_date: date | None = Query(None),
     end_date: date | None = Query(None),
-    current_user=Depends(get_current_user),
+    current_user=Depends(get_current_user)
 ):
     return await ReportService.export_csv(
         report=report,
         start_date=start_date,
         end_date=end_date,
+        current_user=current_user,
     )
-
 
