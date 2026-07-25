@@ -1,148 +1,164 @@
-#File: app/api/v1/auth.py 
+# ******************************************** #
+#          File: app/api/v1/auth.py            #
+# ******************************************** #
+from fastapi import APIRouter, Depends, HTTPException, status
 
-from fastapi import APIRouter, Depends, HTTPException, status 
-from fastapi import OAuth2PasswordRequestForm 
-
-from app.schema.auth import (
+from app.schemas.auth import (
     LoginRequest,
-    LoginResponse,
-    RefreshTokenRequest,
+    RegisterRequest,
     TokenResponse,
     UserResponse,
+    ForgotPasswordRequest,
+    ResetPasswordRequest,
+    ChangePasswordRequest,
+    UpdateProfileRequest,
+    VerifyEmailResponse,
+    MessageResponse,
 )
 
 from app.services.auth_service import AuthService 
-from app.core.dependencies import get_current_user 
+from app.core.dependencies import get_auth_service, get_current_user
 
-router = APIRouter()
+from app.model.user import User 
 
+router = APIRouter(
+    prefix="/auth",
+    tags=["Authentication"],
+)
+
+# Register
+@router.post(
+    "/register",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def register(
+    payload: RegisterRequest,
+    service: AuthService = Depends(get_auth_service),
+):
+    return await service.register(payload)
+
+# Login
 @router.post(
     "/login",
-    response_model=LoginResponse,
-    summary="User Login"
-)
-
-async def login(
-    credentials: LoginRequest,
-): 
-    """
-    Authenticate a user and return access & refresh tokens.
-    """
-    return await AuthService.login(credentials)
-
-
-@router.post(
-    "/token",
-    response_model = TokenResponse,
-    summary="OAuth2 Login"
-)
-async def oauth_login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-):
-    """
-    OAuth2 compatible login endpoint.
-    """
-    return await AuthService.oauth_login(form_data)
-
-@router.post(
-    "/refresh",
     response_model=TokenResponse,
-    summary="Refresh Access Token"
+)
+async def login(
+    payload: LoginRequest,
+    service: AuthService = Depends(get_auth_service),
+):
+    return await service.login(payload)
+
+# Logout
+@router.post(
+    "/logout",
+    respponse_model=MessageResponse,
+)
+async def logout(
+    current_user: User = Depends(get_current_user),
+    service: AuthService = Depends(get_auth_service),
+):
+    return await service.logout(current_user)
+
+# Refresh Token
+@router.post(
+    "/refresh-token",
+    response_model=TokenResponse,
 )
 async def refresh_token(
-    request: RefreshTokenRequest,
+    refresh_token: str,
+    service: AuthService = Depends(get_auth_service),
 ):
-    """
-    Generate a new access token using a refresh token.
-    """
-    return await AuthService.refresh_token(request.refresh_token)
+    return await service.refresh_token(refresh_token)
 
+# Current User
 @router.get(
     "/me",
     response_model=UserResponse,
-    summary="Current Userr"
 )
 async def current_user(
-    user=Depends(get_current_user),
+    current_user: User = Depends(get_current_user),
 ):
-    """
-    Return authenticated user's profile.
-    """
-    return user 
+    return current_user
+
+# Profile 
+@router.get(
+    "/profile",
+    response_model=UserResponse,
+)
+async def get_profile(
+    current_user: User = Depends(get_current_user),
+):
+    return current_user
+
+@router.put(
+    "/profile",
+    response_model=UserResponse,
+)
+async def update_profile(
+    payload: UpdateProfileRequest,
+    current_user: User = Depends(get_current_user),
+    service: AuthService = Depends(get_auth_service),
+):
+    return await service.update_profile(
+        current_user.id,
+        payload,
+    )
+    
+# Email Verification 
+@router.get(
+    "/verify-email/{token}",
+    response_model=VerifyEmailResponse,
+)
+async def verify_email(
+    token: str,
+    service: AuthService = Depends(get_auth_service),
+):
+    return await service.verify_email(token)
 
 @router.post(
-    "/logout",
-    summary="Logout"
+    "/resend-verification",
+    response_model=MessageResponsef,
 )
-async def logout(
-    user=Depends(get_current_user),
+async def resend_verification(
+    email: str,
+    service: AuthService = Depends(get_auth_service),
 ):
-    """
-    Logout the current user.
-    """
-    await AuthService.logout(user.id)
+    return await service.resend_verification(email)
 
-    return {
-        "success": True,
-        "message": "Logged out successfully."
-    }
-
+# Password Management 
 @router.post(
     "/forgot-password",
-    summary="Forgot Password"
+    response_model=MessageResponse,
 )
 async def forgot_password(
-    email: str,
+    payload: ForgotPasswordRequest,
+    service: AuthService = Depends(get_auth_service),
 ):
-    """
-    Send password reset email.
-    """
-    await AuthService.forgot_password(email)
-
-    return {
-        "success": True,
-        "message": "Password reset email sent."
-    }
+    return await service.forgot_passwword(payload)
 
 @router.post(
     "/reset-password",
-    summary="Reset Password"
+    response_model=MessageResponse,
 )
 async def reset_password(
-    token: str,
-    password: str,
+    payload: ResetPasswordRequest,
+    service: AuthService = Depends(get_auth_service),
 ):
-    """
-    Reset account password.
-    """
-    await AuthService.reset_password(
-        token=token,
-        password=password,
-    )
+    return await service.reset_passwprd(payload)
 
-    return {
-        "success": True,
-        "message": "Password reset successfully."
-    }
-
-@router.post(
+@router.put(
     "/change-password",
-    summary="Change Password"
+    response_model=MessageResponse,
 )
 async def change_password(
-      old_password: str,
-      new_password: str,
-      user=Depend(get_current_user)  ,
+    payload: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    service: AuthService = Depends(get_auth_service),
 ):
-    """
-    Change logged-in user's password.
-    """
-    await AuthService.change_password(
-        user_id=user.id,
-        old_password=old_password,
-        new_password=new_password,
+    return await service.change_password(
+        current_userr.id,
+        payment,
     )
-    return {
-        "success": True,
-        "message": "Password changed successfully."
-    }
+    
+    
