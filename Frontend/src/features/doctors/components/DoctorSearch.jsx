@@ -1,19 +1,18 @@
-/* ****************************************************** */
-/* File: src/features/doctors/components/DoctorSearch.jsx */
-/* ****************************************************** */
+/* ******************************************************** */
+/* File: src/features/doctors/components/DoctorSearch.jsx   */
+/* ******************************************************** */
 
 import React, { useEffect, useState } from "react";
 
 const DoctorSearch = ({
     value = "",
-    placeholder = "",
+    placeholder = "Search by name, email, phone, specialty or license number...",
     delay = 400,
     autoFocus = false,
     showClearButton = true,
     loading = false,
     onSearch,
 }) => {
-
     const [keyword, setKeyword] = useState(value);
 
     /* Keep local state synchronized */
@@ -53,19 +52,21 @@ const DoctorSearch = ({
     };
 
     return (
-        <form 
+        <form
             className="doctor-search"
             onSubmit={handleSubmit}
         >
             <div className="doctor-search-input">
-                <span className="doctor-search-icon">
 
+                <span className="doctor-search-icon">
+                    🔍
                 </span>
 
-                <input 
+                <input
                     type="search"
                     value={keyword}
                     placeholder={placeholder}
+                    autoFocus={autoFocus}
                     onChange={handleChange}
                 />
 
@@ -76,18 +77,18 @@ const DoctorSearch = ({
                 )}
 
                 {showClearButton && keyword && (
-                    <button 
+                    <button
                         type="button"
                         className="doctor-search-clear"
                         onClick={handleClear}
                     >
-                        X
+                        ✕
                     </button>
                 )}
+
             </div>
         </form>
     );
 };
 
 export default DoctorSearch;
-
