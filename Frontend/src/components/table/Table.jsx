@@ -1,53 +1,47 @@
-//src/components/table/Table.jsx 
+/* ************************************ */
+/* File: src/components/table/Table.jsx */
+/* ************************************ */
 
-import React from 'react';
-import './Table.css';
+import TableHeader from "./TableHeader";
+import TableBody from "./TableBody";
+import TableLoading from "./TableLoading";
+import TableEmpty from "./TableEmpty";
 
-function Table({ columns, data, actions }) {
+const Table = ({
+    columns = [],
+    data = [],
+    actions = [],
+    loading = false,
+    rowKey = "id",
+    emptyMessage = "No data found.",
+}) => {
+
+    if (loading) {
+        return <TableLoading />
+    }
+
+    if  (!data.length) {
+        return <TableEmpty message={emptyMessage} />
+    }
+
     return (
+
         <div className="table-container">
             <table className="table">
-                <thead>
-                    <tr>
-                        {columns.map((col, index) => (
-                            <th key={index}>{col}</th>
-                        ))}
-                        {actions && <th>Actions</th>}
-                    </tr>
-                </thead>
-                <tbody>
-                    {data.lenght > 0 ? (
-                        data.map((row, index) => (
-                            <tr key={index}>
-                                {columns.map((col, colIndex) => (
-                                    <td key={colIndex}>{row[col]}</td>
-                                ))}
-                                {actions && (
-                                    <td>
-                                        {actions.map((action, actionIndex) => (
-                                            <button
-                                                key={actionIndex}
-                                                onClick={() => action.onClick(row)}
-                                            >
-                                                {action.label}
-                                            </button>
-                                        ))}
-                                    </td>
-                                )}
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan={columns.length + (actions ? 1 : 0)}>
-                                No data available
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
+                <TableHeader 
+                    columns={columns}
+                    hasActions={actions.length > 0}
+                />
+
+                <TableBody 
+                    columns={columns}
+                    data={data}
+                    actions={actions}
+                    rowKey={rowKey}
+                />
             </table>
         </div>
     );
-}
-
+};
 export default Table;
 
