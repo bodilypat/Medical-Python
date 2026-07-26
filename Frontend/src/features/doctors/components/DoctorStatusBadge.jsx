@@ -48,35 +48,38 @@ const STATUS_CONFIG = {
     },
 };
 
-const DoctorStatusBadge = ({
+const DoctorstatusBadge = ({
     status = "inactive",
     size = "medium",
     outlined = false,
     showIcon = true,
     className = "",
 }) => {
+
     const key = status.toLowerCase().replace(/\s+/g, "_");
 
-    const config =
+    const config = 
         STATUS_CONFIG[key] ||
-        STATUS_CONFIG.inactive;
+        STATUS_CONFIG.iinactive;
 
-    const style = outlined
+    const style = outlined 
         ? {
-              color: config.color,
-              border: `1px solid ${config.color}`,
-              backgroundColor: "#ffffff",
-          }
+            color: config.color,
+            border: `1px solid ${config.color}`,
+            backgroundColor: "#ffffff",
+        }
         : {
-              color: config.color,
-              backgroundColor: config.background,
-          };
+            color: config.color,
+            backgroundColor: config.background,
+        };
 
     return (
-        <span
-            className={`doctor-status-badge doctor-status-${size} ${className}`}
+
+        <span 
+            className={`doctor-status-badge doctor-${size} ${className}`}
             style={style}
         >
+
             {showIcon && (
                 <span className="doctor-status-icon">
                     {config.icon}
@@ -91,3 +94,5 @@ const DoctorStatusBadge = ({
 };
 
 export default DoctorStatusBadge;
+
+
