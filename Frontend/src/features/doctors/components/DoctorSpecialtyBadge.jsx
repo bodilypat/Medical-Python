@@ -1,6 +1,6 @@
-/* ************************************************************** */
-/* File: src/features/doctors/components/DoctorSpecialtyBadge.jsx */
-/* ************************************************************** */
+/* ************************************************************* */
+/* File: src/features/doctors/components/DoctorSpecialtyBage.jsx */ 
+/* ************************************************************* */
 
 import React from "react";
 
@@ -9,13 +9,11 @@ const specialtyColors = {
     Neurology: "#8b5cf6",
     Orthopedics: "#2563eb",
     Pediatrics: "#22c55e",
-    Dermatology: "#f59e0b",
+    Dermatology: "#22c55e",
     Oncology: "#dc2626",
-    Radiology: "#0ea5e9",
-    Psychiatry: "#7c3aed",
+    Radiology:"#0ea5e9",
+    Psychiatry: "#7c3ead",
     Gynecology: "#ec4899",
-    Urology: "#14b8a6",
-    Ophthalmology: "#3b82f6",
     ENT: "#10b981",
     Dentistry: "#f97316",
     Surgery: "#64748b",
@@ -29,33 +27,32 @@ const DoctorSpecialtyBadge = ({
     showIcon = true,
     className = "",
 }) => {
-    if (!specialty) {
+
+    if(!specialty) {
         return (
-            <span
+            <span 
                 className={`doctor-specialty-badge doctor-specialty-default doctor-specialty-${size} ${className}`}
             >
-                {showIcon && <span>🩺</span>}
-                <span>General</span>
+                  {showIcon && <span>🩺</span>}
+                    <span>General</span>
             </span>
         );
     }
 
-    const color =
-        specialtyColors[specialty] ||
-        specialtyColors.General;
+    const color = specialtyColors[specialty] || specialtyColors.General;
 
-    const style = outlined
+    const style = outlined 
         ? {
-              color,
-              border: `1px solid ${color}`,
-              backgroundColor: "#ffffff",
+             color,
+             border: `1px soid ${color}`,
+             backgroundColor: "#ffffff",
           }
         : {
-              color: "#ffffff",
-              backgroundColor: color,
-          };
+            color: "#ffffff",
+            backgroundColor: color,
+        };
 
-    const icons = {
+    const icon = {
         Cardiology: "❤️",
         Neurology: "🧠",
         Orthopedics: "🦴",
@@ -74,7 +71,8 @@ const DoctorSpecialtyBadge = ({
     };
 
     return (
-        <span
+
+        <span 
             className={`doctor-specialty-badge doctor-specialty-${size} ${className}`}
             style={style}
         >
@@ -92,3 +90,5 @@ const DoctorSpecialtyBadge = ({
 };
 
 export default DoctorSpecialtyBadge;
+
+
