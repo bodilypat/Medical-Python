@@ -4,47 +4,73 @@
 
 import React, { useEffect, useState } from "react";
 
-const initialFormState = {
+const initialFormStatus = {
     first_name: "",
     last_name: "",
-    specialty: "",
+    gender: "",
     email: "",
     phone: "",
+
+    specialization: "",
+    quanlification: "",
+
+    experience: "",
     license_number: "",
+
     department: "",
-    expirience_years: "",
+
+    consultation_fee: "",
+
+    status: "active"
 };
 
 const DoctorForm = ({
     doctor = null,
     onSubmit,
     onCancel,
+    loading = false,
 }) => {
-    const [formData, setFormData] = useState(initialFormState);
 
-    /* Load existing doctor data for edit mode */
+    const [formData, setFormData] = useState(
+        initialFormStatus
+    );
+
+    /* ---------------------------------------- */
+    /*     Load Doctor Data for Edit Mode      */
+    /* ---------------------------------------- */
+
     useEffect(() => {
 
         if (doctor) {
+
             setFormData({
-                first_name: doctor.first_name || "",
-                last_name: doctor.last_name || "",
-                specialty: doctor.specialty || "",
-                email: doctor.email || "",
-                phone: doctor.phone || "",
-                license_number: doctor.lincese_number || "",
-                department: doctor.department || "",
-                expirience_years:
-                    doctor.expirience_years || "",
+
+                first_name: doctor.first_name ?? "",
+                last_name: doctor.last_name ?? "",
+                gender: doctor.gender ?? "",
+                email: doctor.email ?? "",
+                phone: doctor.phone ?? "",
+                specialization: doctor.specialization ?? "",
+                quanlification: doctor.quanlification ?? "",
+                experience: doctor.experience ?? "",
+                license_number: doctor.license_number ?? "", 
+                department: doctor.department ?? "",
+                consultation_fee: doctor.consultation_fee ?? "",
+                status: doctor.status ?? "active",
             });
+
         } else {
-            setFormData(initialFormState);
+            
+            setFormData( initialFormState );
         }
     }, [doctor]);
 
-    const handleChange = (event) => {
+    /* ---------------------------------------- */
+    /*          Handle Input Change             */
+    /* ---------------------------------------- */
 
-        const  {
+    const handleChange = (event) => {
+        const {
             name,
             value,
         } = event.target;
@@ -55,125 +81,136 @@ const DoctorForm = ({
         }));
     };
 
+    /* ---------------------------------------- */
+    /*                Submit Form               */
+    /* ---------------------------------------- */
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        
-        onSubmit(formData);
+
+        if (!onSubmit) {
+            return;
+        }
+
+        onSubmit({
+
+            ...formData,
+            experience: Number(formData.experience) || 0,
+            consultation_fee: Number(formData.consultation_fee) || 0,
+
+        });
     };
 
+    /* ---------------------------------------- */
+    /*         Reusable Input Components        */
+    /* ---------------------------------------- */
+    const renderInput = (
+        label,
+        name,
+        type = "text",
+        required = false 
+    ) => (
+
+        <div className="form-group">
+
+            <label htmlFor={name}>{label}</label>
+
+            <input 
+                id={name}
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                required={required}
+            />
+        </div>
+    );
+
     return (
-        <form 
-            className="doctor-form"
-            onSubmit={handleSubmit}
-        >
+        <form className="doctor-form" onSubmit={handleSubmit}>
+            {renderInput(
+                "first_name",
+                "first_name",
+                "text",
+                true 
+            )}
+
+            {renderInput(
+                "Last Name",
+                "last_name",
+                "text",
+                true 
+            )}
+
             <div className="form-group">
 
-                <label>First Name</label>
+                <label htmlFor="gender">Gender</label>
                 
-                <input 
-                    type="text"
-                    name="first-name"
-                    value={formData.first_name}
+                <select 
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
                     onChange={handleChange}
-                    required 
-                />
+                >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
 
+                </select>
             </div>
+
+            {renderInput(
+                "Email",
+                "email",
+                "email",
+                true
+            )}
+
+            {renderInput(
+                "Phone",
+                "phone",
+                "phone",
+                true 
+            )}
+
+            {renderInput(
+                "Specialiizatin",
+                "specialization",
+                "specialization"
+            )}
+
+            {renderInput(
+                "Department",
+                "department"
+            )}
+
+            {renderInput(
+                "Experience (Years)",
+                "experience",
+                "number"
+            )}
+
+            {renderInput(
+                "Consulation Fee",
+                "consultation_fee",
+                "number"
+            )}
 
             <div className="form-group">
 
-                <lable>Last Name</lable>
+                <label htmlFor="status">Status</label>
 
-                <input  
-                    type="text"
-                    name="last_name"
-                    value={formData.last_name}
+                <select 
+                    id="status"
+                    name="status"
+                    value={formData.status}
                     onChange={handleChange}
-                    required
-                />
-
-            </div>
-
-            <div className="form-group">
-
-                <label>Specialty</label>
-
-                <input 
-                    type="text"
-                    name="specialty"
-                    value={formData.specialty}
-                    onChange={handleChange}
-                    required 
-                />
-
-            </div>
-
-            <div className="form-group">
-
-                <label>Department</label>
-
-                <input 
-                    type="text"
-                    name="department"
-                    value={formData.department}
-                    onChange={handleChange}
-                />
-
-            </div>
-
-            <div className="form-group">
-                
-                <label>License Number</label>
-
-                <input 
-                    type="text"
-                    name="license_number"
-                    value={formData.license_number}
-                    onChange={handleChange}
-                    required
-                />
-
-            </div>
-
-            <div className="fform-group">
-
-                <label>Experience (Years)</label>
-
-                <input 
-                    type="number"
-                    name="experience_years"
-                    value={formData.expirience_years}
-                    onChange={handleChange}
-                    min="0"
-                />
-
-            </div>
-
-            <div className="form-group">
-
-                <label>Email</label>
-
-                <input 
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                />
-
-            </div>
-
-            <div className="form-group">
-                
-                <label>Phone</label>
-
-                <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                />
+                >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="leave">On Leave</option>
+                </select>
 
             </div>
 
@@ -183,23 +220,30 @@ const DoctorForm = ({
                     type="button"
                     className="cancel-btn"
                     onClick={onCancel}
+                    disabled={loading}
                 >
                     Cancel
                 </button>
 
                 <button 
-                    type="submit"
+                    type="Submit"
                     className="submit-btn"
+                    disabled={loading}
                 >
                     {
-                        doctor
-                            ? "Update Doctor"
-                            : "Add Doctor"
+                        loading 
+                            ? "Saving..."
+                            : doctor 
+                                ? "Update Doctor"
+                                : "Add Doctor"
                     }
+
                 </button>
             </div>
+
         </form>
     );
 };
 
 export default DoctorForm;
+
