@@ -3,27 +3,40 @@
 /* ********************************************* */
 
 import {
-    useState,
-    useEffect,
     useCallback,
+    useEffect,
+    useState,
 } from "react";
 
 import {
     getDoctorById,
     updateDoctor,
     deleteDoctor,
-} from "../service/doctor.service";
+} from "../services/doctor.service";
 
-export const useDoctor = (doctId) => {
-    const [doctor, setDoctor] = useState(null);
-    const [loading, setLoading] = useState(fasle);
+const getRresponseData = (response) => response?.data ?? response;
+
+export const useDoctor = (doctorId) =>  {
+    const [doctor, setLoading] = useState(null);
+
+    const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
-    const [deleting, setDeleting] = useState(false);
+    const [setDeleting, setDeleting] = useState(false)
+
     const [error, setError] = useState(null);
 
-    /* Fetch single doctor details */
+    const hasDoctorId = Boolean(doctorId);
+
+    const handleError =  useCallback((err) => {
+        console.error(err);
+        setError(err);
+    }, []);
+
+    /* Fetch doctor */
     const fetchDoctor = useCallback(async () => {
-        if (!doctorId) {
+
+        if (!hasDoctorId) {
+            setDoctor(null);
             return;
         }
 
@@ -31,61 +44,61 @@ export const useDoctor = (doctId) => {
         setError(null);
 
         try {
-            const response = await getDoctorById( 
-                doctorId 
-            );
-            const data =  response?.data ?? response;
+            const response = await getDoctorById(doctorId);
+
+            const data = getResponseData(response);
+
             setDoctor(data);
 
-        } catch (eror) {
-            console.error(
-                "Failed to fetch doctor:", err 
-            );
-
+            return data;
+        } catch (err) {
             setDoctor(null);
-            setError(err);
+            handleError(err);
+
+            return null;
         } finally {
             setLoading(false);
         }
-    }, [doctorId]);
+    }, [doctorId, hasDoctorId, handleError]);
 
-    /* Update doctor details */
-    const editDoctor = async ( 
-        doctorData
-    ) => {
-        if (!DoctorId) {
-            return;
-        }
-        setSaving(true);
-        setError(null);
+    /* Refresh */
+    const refreshDoctor = useCallback(() => {
+        return fetchDoctor();
+    }, [fetchDoctor]);
 
-        try {
-            const response = await updateDoctor(
-                doctorId,
-                doctorData 
-            );
+    /* Update doctor */
+    const editDoctor = useCallback(
+        async (doctorData) => {
+            if (!hasDoctorId) return null;
 
-            await fetchDoctor();
-            return response;
+            setSaviing(true);
+            setError(null);
 
-        } catch (err) {
-            console.error(
-                "Failed to update doctor:" , err 
-            );
+            try {
+                const response = await updateDoctor(
+                    doctorId,
+                    doctorData
+                );
 
-            setError(err);
-            throw err;
+                const updatedDoctor = getResponseData(response);
 
-        } finally {
-            setSaving(false);
-        }
-    };
+                // Update local state instead of making another GET request 
+                setDoctor(updatedDoctor);
 
-     /* Delete doctor */
-    const removeDoctor = async () => {
-        if (!doctorID) {
-            return false;
-        }
+                return updateError;
+            } catch (err) {
+                handleError(err);
+                throw err;
+            } finally {
+                setSaving(false);
+            }
+        },
+        [doctorId, hasDoctorId, handleError]
+    );
+
+    /* Delete doctor */
+    const removeDoctor = useCallback(async () => {
+        if (!hasDoctorId) return false;
 
         const confirmed = window.confirm(
             "Are you sure you want to delete this doctor?"
@@ -94,58 +107,47 @@ export const useDoctor = (doctId) => {
         if (!confirmed) {
             return false;
         }
-        
+
         setDeleting(true);
         setError(null);
 
-        try {
-            await deleteDoctor(
-                doctorId
-            );
+        try {            await deleteDoctor(doctorId);
 
             setDoctor(null);
+
             return true;
         } catch (err) {
-            console.error(
-                "Failed to delete doctor.", err 
-            );
-
-            setError(err);
+            handleError(err);
             throw err;
         } finally {
             setDeleting(false);
         }
-    };
-
-    /* Reload doctor details */
-
-    const refreshDoctor = async () => {
-        await fetchDoctor();
-    };
-
-    /* Initial load */
+    }, [doctorId, hasDoctorId, handleError]);
 
     useEffect(() => {
         fetchDoctor();
     }, [fetchDoctor]);
 
-    return {
-        // Data 
-        doctor,
 
-        // Status 
+    return {
+        //State 
+        doctor,
         loading,
         saving,
         deleting,
         error,
 
-        // Action 
+        // Actives 
         fetchDoctor,
         refreshDoctor,
         editDoctor,
         removeDoctor,
+
+        // Local update
+        setDoctor,
     };
 };
 
 export default useDoctor;
+
 

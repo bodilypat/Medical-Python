@@ -1,6 +1,7 @@
 /* ********************************************** */
 /* File: src/features/doctors/hooks/useDoctors.js */ 
 /* ********************************************** */
+
 import {
     useState,
     useEffect,
@@ -12,52 +13,62 @@ import {
     createDoctor,
     updateDoctor,
     deleteDoctor,
-} from "../service/doctor.service";
+} from "../services/doctor.service";
 
 export const useDoctors = () => {
-    const [doctors, setDoctorss] = useState([]);
-    const [loading, setLoadiNG] = useState(false);
+
+    const [doctors, setDoctors] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
     const [deleting, setDeleting] = useState(false);
     const [error, setError] = useState(null);
 
-    /* Fetch all doctors */
+    /* Fetch all Doctors */
     const fetchDoctors = useCallback(async () => {
-        setLoadiNG(true);
+
+        setLoading(true);
         setError(null);
 
         try {
             const response = await getDoctors();
             const data = response?.data ?? response;
-            
-            setDoctorss(data);
+
+            setDoctors(data);
         } catch (err) {
             console.error(
-                "Failed to fetch doctors:", err
+                "Failed to fetch doctors:",
+                err 
             );
+
             setError(err);
-            setDoctorss([]);
+            setDoctors([]);
         } finally {
-            setLoadiNG(false);
+            setLoading(false);
         }
     }, []);
 
-    /* Add new doctor */
+    /* Add New doct */
+
     const addDoctor = async (doctorData) => {
         setSaving(true);
         setError(null);
 
         try {
-            const response = await createDoctor(doctorData);
+
+            const response = await createDoctor( 
+                doctorData 
+            );
+
             await fetchDoctors();
             return response;
         } catch (err) {
             console.error(
-                "Failed to created doctor:", err
-            );
-
-            setError(er);
-
+                "Failed to create doctor.",
+                err 
+            ); 
+            
+            setError(err);
+            
             throw err;
         } finally {
             setSaving(false);
@@ -67,39 +78,39 @@ export const useDoctors = () => {
     /* Update doctor */
     const editDoctor = async (
         doctorId,
-        doctorData
+        doctorData,
     ) => {
+
         setSaving(true);
         setError(null);
+
         try {
             const response = await updateDoctor(
                 doctorId,
-                doctorData,
+                doctorData 
             );
-            
+
             await fetchDoctors();
             return response;
-
         } catch (err) {
-            console.error( 
+            console.error(
                 "Failed to update doctor:",
                 err 
             );
-
-            setError(err);
-            throw err;
-
         } finally {
             setSaving(false);
         }
     };
 
-    /* Delete Doctor */
+    /* Delete doctor */
+
     const removeDoctor = async (
         doctorId 
     ) => {
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this doctor?"
+        const confirmed = 
+        window.confirm(
+            "Are your sure you want to delete this doctors",
+            err 
         );
 
         if (!confirmed) {
@@ -110,17 +121,16 @@ export const useDoctors = () => {
         setError(null);
 
         try {
-
-            await deleteDoctor( 
+            await deleteDoctor(
                 doctorId 
             );
 
             await fetchDoctors();
             return true;
-
         } catch (err) {
-            console.error(
-                "Failed to delete doctor:", err 
+            console.error (
+                "Failed to delete doctor.",
+                err 
             );
 
             setError(err);
@@ -132,33 +142,32 @@ export const useDoctors = () => {
     };
 
     /* Refresh doctor list */
-    const refreshDoctors =  async () => {
-        await fetchDoctors();
+    const refreshDoctors = async () => {
+        await fetchDocots();
     };
 
     /* Initial loading */
     useEffect(() => {
         fetchDoctors();
-    }, [fetchDoctors]);
+    }, [fetchDoctors])
 
     return {
-        // Data 
+        // Date 
         doctors,
-
         // Status 
         loading,
-        saving,
-        deleting,
-        error,
-
+        saving, 
+        deleting, 
+        error, 
         // Actions 
         fetchDoctors,
         refreshDoctors,
         addDoctor,
-        editDoctor,
+        editDoctor, 
         removeDoctor,
     };
 };
 
 export default useDoctors;
+
 
