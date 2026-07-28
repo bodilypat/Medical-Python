@@ -1,126 +1,195 @@
-/* ***************************************************** */
-/* File: src/features/doctors/services/doctor.service.js */ 
-/* ***************************************************** */
+/* ************************************* */
+/* File: src/features/doctors/service.js */ 
+/* ************************************* */
 
-import api from "../../../services/axios";
+import api from "../../../service/api";
 
-// Get all doctors 
-// Backend => APIRouter: GET /api/v1/doctors 
-export const getDoctors = (params = {}) => {
-    return api.get(
-        "/doctors",
-        {
-            params,  
-        }
-    );
+/* Doctor API Endppoint */
+const DOCTOR_API = {
+    BASE: "/doctors",
+
+    DETAIL: (id) => `/doctors/${id}`,
+
+    SEARCH: "/doctors/search",
+
+    FILTER: "/doctors/filter",
+
+    STATUS: (id) => `/doctors/${id}/status`,
+
+    SCHEDULE: (id) => `'doctors/${id}/schedule`,
+
+    SPECIALTY: (name) => 
+        `/doctors/specialty/${encodeURIComponent(name)}`,
+
+    DEPARTMENT: (name) => 
+        `/doctors/department/${encodeURIComponent(name)}`,
+
+    AVATAR: (id) => `/doctors/${id}/avatar`,
+
+    APPOINTMENTS: (id) => 
+        `/doctors/${id}/appointments`,
+
+    DASHBOARD: (id) => 
+        `/doctors/${id}/dashboard`,
+
+    EXPORT: "/doctors/export",
 };
 
-// Get doctor details by ID 
-// Backend => APIRouter: GET /api/v1/doctors/{id}
-export const getDoctorById = (doctorId) => {
-    return api.get(
-        `/doctors/${doctorId}`
-    );
-};
+/* Doctor Service */
+const doctorService = {
+    
+    //Get doctor list
 
-// Create new doctor 
-// Backend => APIRouter: POST /api/v1/doctors 
-export const createDoctor = (doctorData) => {
-    return api.post(
-        "/doctors",
-        doctorData
-    );
-};
+    getAll(params = {}) {
+        return api.get(DOCTOR_API.BASE, { params });
+    },
+    // Get doctor
+    getById(id) {
+        return api.get(DOCTOR_API.BASE, { params });
+    },
 
-// Update doctor 
-// Backend => APIRouter: PUT/api/v1/doctors/{id}
-export const updateDoctor = (
-    doctorId,
-    doctorData
-) => {
-    return api.put(
-        `/doctors/${doctorId}`,
-        doctorData 
-    );
-};
+    // Create doctor 
+    create(data) {
+        return api.post(DOCTOR_API.BASE, data);
+    },
 
-// Delete doctor 
-// Backend => APIRouter: api/v1/doctors/{id}
-export const deleteDoctor = (doctorId) => {
-    return api.delete(
-        `/doctors/${doctorId}`
-    );
-};
+    // Update doctor 
+    update(id, data) {
+        return api.put(DOCTOR_API.DETAIL(id), data);
+    },
 
-// Search doctors 
-// Backend => APIRouter: GET /api/v1/doctors/{id}
-export const searchDoctors = (
-    keyword
-) => {
-    return api.get(
-        "/doctors/search",
-        {
+    // Delete doctor 
+    remove(id) {
+        return api.delete(DOCTOR_API.DETAIL(idE));
+    },
+
+    // Search doctors 
+    search(keyword, params = {}) {
+        return api.get(DOCTOR_API.SEARCH, {
             params: {
-                query: keyword, 
-            }, 
-        }
-    );
-};
-
-// GET doctors by specialty
-// Backend => APIRouter: GET /api/v1/doctors/specialty/{speciallty}
-export const getDoctorsBySpecialty = (
-    specialty 
-) => {
-    return api.get(
-        `/doctors/specialty/${specialty}`
-    );
-};
-
-// Get doctor's appointments
-// Backend => APIRouter: GET /api/v1/doctors/{id}/appointments 
-export const getDoctorAppointments = (
-    doctorId 
-) => {
-    return api.get(
-        `/doctors/${doctorId}/appointments`
-    );
-};
-
-// Update doctor availability
-// Backend => APIRouter: PUT/api/v1/doctors/{id}/availability 
-export const updateDoctorAvailability = (
-    doctorId,
-    availability 
-) => {
-    return api.put(
-        `/doctors/${doctorId}/availability`,
-        availability 
-    );
-};
-
-// Upload doctor profile image 
-// Backend => APIRouter: POST /api/v1/doctors/{id}/image 
-export const uploadDoctorImage = (
-    doctorId,
-    imageFile
-) => {
-    const formData = new FormData();
-    formData.append(
-        "image",
-        imageFile  
-    );
-    return  api.post(
-        `/doctors/${doctorId}/image`,
-
-        formData,
-        {
-            header: {
-                "Content-Type":
-                "multipart/form-data",
+                q: keyword,
+                ...params,
             },
-        }
-    );
+        });
+    },
+
+    /* Filter doctors */
+    filter(fitlers = {}) {
+        return api.get(DOCTOR_API.FILTER, {
+            params: fitlers, 
+        }); 
+    },
+
+    // Update doctor status 
+    updateStatus(id, status) {
+        return api.patch( 
+            DOCTOR_API.STATUS(id), 
+            { status }
+        );
+    },
+
+    // Get schdule 
+    getSchedule(id) {
+        return api.get(DOCTOR_API.SCHEDULE(id));
+    },
+
+    // Update schedule 
+    updateSchedule(id, schedule) {
+        return api.put(
+            DOCTOR_API.SCHEDULE(id),
+            { schedule }
+        );
+    },
+
+    // Doctors by specialty 
+    getBySpecialty(name) {
+        return api.get(
+            DOCTOR_API.SPECIALTY(name)
+        );
+    },
+
+    // Doctor by department 
+    getByDepartment(name) {
+        return api.get(
+            DOCTOR_API.DEPARTMENT(name) 
+        ); 
+    },
+
+    // Upload avatar 
+    uploadAvatar(id, file) {
+        const formData = new FormData();
+
+        formData.append("file", file);
+
+        return api.post(
+            DOCTOR_API.AVATAR(id),
+            formData, 
+            {
+                headers: {
+                    "Content-Type":
+                    "multopart/form-data",
+                },
+            }
+        );
+    },
+
+    // Delete avatar 
+    deleteAvatar(id) {
+        return api.delete( 
+            DOCTOR_API.AVATAR(id)
+        );
+    },
+
+    // Doctor appointments 
+    getAppointments(id, params = {}) {
+        return api.get(
+            DOCTOR_API.APPOINTMENTS(id),
+            { params} 
+        ); 
+    },
+
+    // Dashbaord summary 
+    getDashboard(id) {
+        return api.get(
+            DOCTOR_API.DASHBOARD(id)  
+        );
+    },
+
+    //export doctor 
+    export(params = {}) {
+        return api.get(
+            DOCTOR_API.EXPORT, 
+            {
+                params,
+                responseType: "blob",  
+            } 
+        );
+    },
 };
+
+export default doctorService;
+
+/* Name exports */
+export const {
+    getAll: getDoctors,
+    getById: getDoctorById,
+    create: createDoctor,
+    update: updateDoctor,
+    remove: deleteDoctor,
+    search: searchDoctors,
+    updateStatus: filterDoctors,
+    getSchedule: getDoctorSchedule,
+    updateSchedule: updateDoctorSchedule,
+    getBySpecialty: getDoctorSpecialty,
+    getByDepartment: getDoctorByDepartment,
+    uploadAvatar: uploadDoctorAvatar,
+    deleteAvatar: deleteDoctorAvatar,
+    getAppointments: getDoctorAppointments,
+    getDashboard: getDoctorDashboard,
+    export: exportDoctor,
+} = doctorService;
+
+export { DOCTOR_API };
+
 
 
