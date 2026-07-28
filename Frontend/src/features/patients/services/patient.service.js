@@ -2,69 +2,124 @@
 /* File: src/features/patients/services/patient.service.js */ 
 /* ******************************************************* */
 
-import api from "../../../services/axios";
- 
-// Get all patients 
-// Backend APIRouter: GET / api/v1/patients
+import api from "../../../services/api";
 
-export const getPatients = (params = {}) => {
-    return api.get("/patients", {
-        params, 
-    });
+const ENDPOINT = "/patients";
+
+/* Validate resource ID. */
+const validateId = (id) => {
+    if (id === undefined || id === null || id === "") {
+        throw new Error("Patient ID is required.");
+    }
 };
 
-// Get patient by ID 
-//Backend APIRouter: GET/api/v1/patients/: id 
+/* Patient API Service */
+const patientService = {
 
-export const getPatientById = (id) => {
-    return api.get(`/patients/${id}`);
-}
+    /* --------------------- */
+    /*    Get all patients   */ 
+    /* GET /api/v1/patients  */
+    /* --------------------- */
+    getAll(param = {}) {
+        return api.get(ENDPOINT, {
+            params, 
+        }); 
+    },
 
-//Create a new patient
-//Backend APIRouter -> POST / api/v1/patients
+    /* ------------------------- */
+    /*     Get patient by ID     */
+    /*  GET /api/v1/patients/:id */
+    /* ------------------------- */
+    getById(id) {
+        validateId(id);
 
-export const createPatient = (patientData) => {
-    return api.post("/patients", patientData);
+        return api.get(`${ENDPOINT}/${id}`);
+    },
+
+    /* ------------------------- */
+    /*       Create Patient      */
+    /*    POST /api/v1/patients  */
+    /* ------------------------- */
+    create(data) {
+        return api.post(ENDPOINT, data);
+    },
+
+    /* ------------------------- */
+    /* Update patient            */
+    /* PUT /api/v1/patients/:id  */
+    /* ------------------------- */
+    update(id, data) {
+        validateId(id);
+
+        return api.put(`${ENDPOINT}/${id}`, data);
+    },
+
+    /* -------------------------- */
+    /* Pattial update             */
+    /* PATCH /api/v1/patients/:id */
+    /* -------------------------- */
+    patch(id, data) {
+        validateId(id);
+
+        return api.patch(`${ENDPOINT}/${ID}`, data);
+    },
+
+    /* --------------------------- */
+    /* Delete patient              */
+    /* DELETE /API/V1/patients/id  */
+    /* --------------------------- */
+    remove(id) {
+        validateId(id);
+
+        return api.delete(`${ENDPOINT}/ ${id}`);
+    },
+
+    /* --------------------------- */
+    /* Search patient              */
+    /* GET /api/v1/patients/search */
+    /* --------------------------- */
+    search(keyword, param = {}) {
+        return api.get(`${ENDPOINT}/search`, {
+            param: {
+                q: keyword,
+                ...params, 
+            }, 
+        });
+    },
+
+    /* -------------------------------  */
+    /* Upload patient documnet          */
+    /* POST /api/v1/patients/:id/upload */
+    /* -------------------------------- */
+    uploadFile(id, file) {
+        validateId(id);
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        return api.post(
+            `${ENDPOINT}/${id}/upload`,
+            formData,
+            {
+                headers: {
+                    "Content-Type" : "multipart/form-data", 
+                }, 
+            }
+        ); 
+    },
+
+    /* --------------------------- */
+    /* Export patients             */
+    /* GET /api/v1/patients/export */
+    /* --------------------------- */
+    export(params = {}) {
+        return api.get(`${ENDPOINT}/export`, {
+            params,
+            responseType: "blob", 
+        }); 
+    },
 };
 
-// Update an existing patient 
-// Backend APIRouter -> PUT /api/v1/patients/: id 
-export const updatePatient = (id, patientData) => {
-    return api.put(`/patients/${id}`, patientData);
-};
+export default patientService;
 
-// Delete a patient 
-// Backend APIRouter -> DELETE /api/v1/patient/:id 
-export const deletePatient = (id) => {
-    return api.delete(`/patients/${id}`);
-};
-
-// Search patients 
-// Backend APIRouter -> GET / api/v1/patients/search 
-export const searchPatient = (keyword) => {
-    return api.get("/patients/search", {
-        params: {
-            q: keyword,
-        },
-    });
-};
-
-// Upload patient document 
-// Backend APIRouter -> POST /api/v1/patients/:id/upload 
-
-export const uploadPatientFile = (id, file) => {
-    const formData = new FormData();
-
-    formData.append("file", file);
-
-    return api.post(
-        `/patients/${id}/upload`,
-        formData,
-        {
-            headers: {
-                "Content-Type" : "multipart/form-data",
-            },
-        }
-    );
-};
 
