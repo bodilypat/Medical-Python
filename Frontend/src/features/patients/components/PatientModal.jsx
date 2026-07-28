@@ -1,39 +1,30 @@
-/* ******************************************************* */
-/* File: src/features/patients/components/PatientModel.jsx */
-/* ******************************************************* */
-import React from "react";
+/* ******************************************************** */
+/*  File: src/features/patients/components/PatientModal.jsx */
+/* ******************************************************** */
+
 import Modal from "../../../components/modal";
 import PatientForm from "./PatientForm";
 
 const PatientModal = ({
-    open,
+    open = false,
     patient = null,
     onClose,
     onSubmit,
 }) => {
-    if (!open) return null;
-
     return (
-        <Modal onClose={onClose}>
-            <div className="patient-modal">
-
-                <div className="patient-modal-header">
-                    <h2>{patient ? "Edit Patient" : "Add Patient"}</h2>
-                </div>
-            
-                <div className="patient-modall-body">
-                    <PatientForm
-                        patient={patient}
-                        onSubmit={onSubmit}
-                        onCancel={onClose}
-                    />
-                </div>
-
-            </div>
+        <Modal
+            open={open}
+            title={patient ? "Edit Patient" : "Add Patient"}
+            size="lg"
+            onClose={onClose}
+        >
+            <PatientForm
+                patient={patient}
+                onSubmit={onSubmit}
+                onCancel={onClose}
+            />
         </Modal>
     );
 };
 
 export default PatientModal;
-
- 

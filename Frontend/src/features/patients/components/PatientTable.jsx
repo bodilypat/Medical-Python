@@ -1,9 +1,11 @@
-/* ******************************************************* */
-/* File: src/features/patients/components/PatientTable.jsx */
-/* ******************************************************* */
-import React from "react";
+/* ********************************************************* */
+/*  File: src/features/patients/components/PatientTable.jsx  */
+/* ********************************************************* */
+
+import { useMemo } from "react";
+
 import Table from "../../../components/table";
-import { pateintColumn }from "../utils/PatientColumns";
+import { patientColumns } from "../utils/patientColumns";
 
 const PatientTable = ({
     patients = [],
@@ -11,44 +13,31 @@ const PatientTable = ({
     onEdit,
     onDelete,
 }) => {
-
-    const actions = [
-        {
-            label: "Edit",
-            className: "edit",
-            onClick: onEdit,
-        },
-        {
-            label: "Delete",
-            className: "delete",
-            onClick: (patient) => {
-                if (
-                    window.confirm(
-                        `Are you sure want to delete ${patient.first_name} ${patient.last_name}?`
-                    )
-                ) {
-                    onDelete(patient.id);
-                }
+    const actions = useMemo(
+        () => [
+            {
+                label: "Edit",
+                className: "edit",
+                onClick: onEdit,
             },
-        },
-    ];
-
-    if (loading) {
-        return (
-            <div className="patient-table-loading">
-                Loading patients...
-            </div>
-        );
-    }
+            {
+                label: "Delete",
+                className: "delete",
+                onClick: onDelete,
+            },
+        ],
+        [onEdit, onDelete]
+    );
 
     return (
-        <Table 
+        <Table
             data={patients}
-            columns = {patientColumns}
+            columns={patientColumns}
             actions={actions}
+            loading={loading}
             emptyMessage="No patients found."
         />
     );
 };
-export default PatientTable;
 
+export default PatientTable;

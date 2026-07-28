@@ -1,116 +1,134 @@
-/* ********************************************************* */
-/* File: src/features/patients/components/PatientProfile.jsx */
-/* ********************************************************* */
+/* ********************************************************** */
+/* File: src/features/patients/components/PatientProfile.jsx  */
+/* ********************************************************** */
 
-import React from "react";
+/* patient object
+    id,
+    first_name,
+    last_name,
+    gender,
+    date_of_birth,
+    email,
+    phone,
+    blood_group,
+    allergies
+    medical_history,
+    emergency_contact,
+    avator
+ */
+import { formatDate } from "../../../utils/date";
+
+const EMPTY_VALUE = "-";
+
+const sections = [
+    {
+        title: "Personal Information",
+        fields: [
+            { label: "First Name", key: "first_name" },
+            { label: "Last Name", key: "last_name" },
+            { label: "Gender", key: "gender" },
+            {
+                label: "Date of Birth",
+                key: "date_of_birth",
+                formatter: formatDate,
+            },
+            { label: "Blood Group", key: "blood_group" },
+        ],
+    },
+    {
+        title: "Contact Information",
+        fields: [
+            { label: "Email", key: "email" },
+            { label: "Phone", key: "phone" },
+            {
+                label: "Address",
+                key: "address",
+                fullWidth: true,
+            },
+        ],
+    },
+    {
+        title: "Medical Information",
+        fields: [
+            { label: "Allergies", key: "allergies" },
+            { label: "Medical History", key: "medical_history" },
+            { label: "Emergency Contact", key: "emergency_contact" },
+        ],
+    },
+    {
+        title: "System Information",
+        fields: [
+            {
+                label: "Created At",
+                key: "created_at",
+                formatter: formatDate,
+            },
+            {
+                label: "Updated At",
+                key: "updated_at",
+                formatter: formatDate,
+            },
+        ],
+    },
+];
 
 const PatientProfile = ({ patient }) => {
-    if (!patient) {
-        return null;
-    }
+    if (!patient) return null;
 
     return (
         <div className="patient-profile">
+            <header className="profile-header">
+                <h2>
+                    {patient.first_name} {patient.last_name}
+                </h2>
 
-            <div className="profile-header">
-                <h2>{patient.first_name} {patient.last_name}</h2>
-            
-                <span className="patient-id">Patient ID: {patient.id}</span>
-            </div>
+                <span className="patient-id">
+                    Patient ID: {patient.id}
+                </span>
+            </header>
 
-            <div className="profile-section">
-                <h3>Personal Information</h3>
+            {sections.map(({ title, fields }) => (
+                <section
+                    key={title}
+                    className="profile-section"
+                >
+                    <h3>{title}</h3>
 
-                <div className="profile-grid">
+                    <dl className="profile-grid">
+                        {fields.map(
+                            ({
+                                label,
+                                key,
+                                formatter,
+                                fullWidth,
+                            }) => {
+                                const value = patient[key];
 
-                    <div className="profile-item">
-                        <label>First Name</label>
-                        <p>{patient.first_name}</p>
-                    </div>
+                                return (
+                                    <div
+                                        key={key}
+                                        className={`profile-item ${
+                                            fullWidth
+                                                ? "profile-item-full"
+                                                : ""
+                                        }`}
+                                    >
+                                        <dt>{label}</dt>
 
-                    <div className="profile-item">
-                        <label>Last Name</label>
-                        <p>{patient.last_name}</p>
-                    </div>
-
-                    <div className="profile-item">
-                        <label>Gender</label>
-                        <p>{patient.gender}</p>
-                    </div>
-
-                    <div className="profile-item">
-                        <label>Date of Birth</label>
-                        <p>{patient.date_of_birth}</p>
-                    </div>
-
-                    <div className="profile-item">
-                        <label>Blood Groop</label>
-                        <p>{patient.blood_group}</p>
-                    </div>
-
-                </div>
-            </div>
-
-            <div className="profile-section">
-                <h3>Contact Information</h3>
-
-                <div className="profile-grid">
-
-                    <div className="profile-item">
-                        <label>Email</label>
-                        <p>{patient.email}</p>
-                    </div>
-
-                    <div className="profile-item">
-                        <label>Phone</label>
-                        <p>{patient.phone}</p>
-                    </div>
-
-                    <div className="profile-item profile-item-full">
-                        <label>Address</label>
-                        <p>{patient.address}</p>
-                    </div>
-
-                </div>
-            </div>
-
-            <div className="profiile-section">
-                <h3>Medical Information</h3>
-                
-                <div className="profile-grid">
-
-                    <div className="profile-item">
-                        <label>Medical history</label>
-                        <p>{patient.medical_history || "-"}</p>
-                    </div>
-
-                    <div className="profile-item">
-                        <label>Emergency Contact</label>
-                        <p>{patient.emergency_contact || "-"}</p>
-                    </div>
-
-                </div>
-            </div>
-
-            <div className="profile-section">
-                <h3>System Information</h3>
-
-                <div className="profile-grid">
-                    
-                    <div className="profile-item">
-                        <label>Created At</label>
-                        <p>{patient.created_at || "-"}</p>
-                    </div>
-
-                    <div className="profile-item">
-                        <label>Updated At</label>
-                        <p>{patient.updated_at || "-"}</p>
-                    </div>
-
-                </div>
-            </div>
-            
+                                        <dd>
+                                            {formatter
+                                                ? formatter(value)
+                                                : value || EMPTY_VALUE}
+                                        </dd>
+                                    </div>
+                                );
+                            }
+                        )}
+                    </dl>
+                </section>
+            ))}
         </div>
     );
 };
+
 export default PatientProfile;
