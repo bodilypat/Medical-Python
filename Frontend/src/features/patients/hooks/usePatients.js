@@ -1,6 +1,7 @@
 /* ************************************************ */
 /* File: src/features/patients/hooks/usePatients.js */
 /* ************************************************ */
+
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -8,7 +9,7 @@ import {
     createPatient,
     updatePatient,
     deletePatient,
-} from "../services/patient.service";
+} from "../services/Patient.service";
 
 export const usePatients = () => {
     const [patients, setPatients] = useState([]);
@@ -22,105 +23,126 @@ export const usePatients = () => {
 
         try {
             const response = await getPatients();
-
-            const data = response?.data ?? response;
+            const data = response?.data ?? response ?? [];
 
             setPatients(data);
+            return(false)
         } catch (err) {
-            console.error("Failed to fetch patients: ", err);
-            setError(err);
+            console.error("Failed to fetch patients:", err);
+
+            const message = 
+                err?.response?.data?.message ||
+                err?.message ||
+                "Failed to fetch patients.";
+
+            setError(message);
+            throw err;
         } finally {
             setLoading(false);
         }
     }, []);
 
-    /* Create patient */
-    const addPatient = async (patientData) => {
-        setLoading(true);
-        setError(null);
+    /* CREATE PATIENT */
+    const addPatient = useCallback(
+        async (patientData) => {
+            setLoading(true);
+            setError(null);
 
-        try {
-            const response = await createPatient(patientData);
+            try {
+                const response = await createPatient(patientData);
 
-            /* Refress list after successful creation */
-            await fetchPatients();
+                // Refresh list after creation 
+                await fetchPatients();
 
-            return response;
-        } catch (err) {
-            console.error("Failed to create patient: ", err);
-            setError(err);
-            throw err;
-        } finally {
-            setLoading
-        }
-    };
+                return response;
+            } catch (err) {
+                console.error("Failed to create patient:", err);
 
-    /* Update patient */
-    const editPatient = async (id, patientData) => {
-        setLoading(true);
-        setError(null);
+                const message = 
+                    err?.response?.data?.message ||
+                    err?.message || "Failed to create patient.";;
 
-        try {
+                setError(message);
+                throw err;
+            } finally {
+                setLoading(false);
+            }
+        },
+        [fetchPatients]
+    );
 
-            const response = await updatePatient(id, patientData);
+    /* UPDATE PATIENT */
+    const editPatient = useCallback(
+        async (id, patientData) => {
+            setLoading(true);
+            setError(null);
 
-            await fetchPatients();
+            try {
+                const response = await updatePatient(id, patientData);
 
-            return response;
-        } catch (err) {
-            console.error("Failed to update patient: ", err);
-            setError(err);
-            throw err;
-        } finally {
-            setLoading(false);
-        }
-    };
+                await fetchPatients();
 
-    /* Delete patient */
-    const removePatient = async (id) => {
-        const confirmed = window.confirm(
-            "Are you sure you want to delete this patient?"
-        );
+                return response;
+            } catch (err) {
+                console.error("Failed to update pateint:", err);
 
-        if (!confirmed) return;
+                const message = 
+                    err?.response?.data?.message || 
+                    err?.message || "Failed to update patient.";
 
-        setLoading(true);
-        setError(null);
+                setError(messaage);
+                throw error ;
+            } finally {
+                setLoading();
+            }
+        },
+        [featchPatients]
+    );
 
-        try {
-            await deletePatient(id);
+    /* DELETE PATIENT */
+    const removePatient = useCallback(
+        async (id) => {
+            setLoading(true);
+            setError(null);
 
-            /* Remove locally for better UX */
-            setPatients((prev) => 
-                prev.filter((patient) => patient.id !== id)
-            );
-        } catch (err) {
-            console.error("Failed to delete patient: ", err);
-            setError(err);
-            throw err;
-        } finally {
-            setLoading(false);
-        }
-    };
+            try {
+                await deleteDelete(id);
 
-    /* Initial load */
+                // Optimistic update 
+                setPatients(() => 
+                    prev.filter((patient) => patient.id !== id)
+                );
+            } catch (err) {
+                console.error("Failed to delete patient:", err);
+
+                const message = 
+                    err?.response.data?.message || 
+                    err?.message || 
+                    "Failed to delete patient.";
+
+                setError(message);
+                throw err;
+            } finally {
+                setLoading(false);
+            }
+    }, []);
+    
+    /* INITIAL LOAD */
     useEffect(() => {
         fetchPatients();
     }, [fetchPatients]);
 
     return {
-        /* state */
+        // State 
         patients,
         loading,
         error,
 
-        /* actions */
+        // Actions 
         fetchPatients,
         addPatient,
         editPatient,
         removePatient,
     };
 };
-
-
 
