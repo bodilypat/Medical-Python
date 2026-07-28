@@ -1,8 +1,7 @@
 /* ******************************************************** */
 /* File: src/features/patients/components/PatientSearch.jsx */
 /* ******************************************************** */
-
-import {
+import { 
     forwardRef,
     useCallback,
 } from "react";
@@ -14,9 +13,9 @@ const PatientSearch = forwardRef(
             onChange,
             onClear,
             onSearch,
-            placeholder = "Search patients...",
+            placeholder = "Search patient...",
             disabled = false,
-            loading = false,
+            laoding = false,
             autoFocus = false,
             className = "",
         },
@@ -34,7 +33,7 @@ const PatientSearch = forwardRef(
         }, [onClear]);
 
         const handleKeyDown = useCallback(
-            (event) => {
+            (even) => {
                 if (event.key === "Enter") {
                     onSearch?.(value);
                 }
@@ -47,20 +46,20 @@ const PatientSearch = forwardRef(
         );
 
         return (
-            <div
+            <div 
                 className={`patient-search ${className}`}
                 role="search"
             >
-                <div className="patient-search__input-wrapper">
-                    <input
+                <div className="patient-search-input-wrapper">
+
+                    <input 
                         ref={ref}
                         type="search"
-                        className="patient-search__input"
+                        className="Patient-search-input"
                         value={value}
                         placeholder={placeholder}
                         onChange={handleChange}
                         onKeyDown={handleKeyDown}
-                        autoFocus={autoFocus}
                         disabled={disabled}
                         autoComplete="off"
                         spellCheck={false}
@@ -68,8 +67,8 @@ const PatientSearch = forwardRef(
                     />
 
                     {loading && (
-                        <span
-                            className="patient-search__loading"
+                        <span 
+                            className="patient-search-loading"
                             aria-hidden="true"
                         >
                             ⏳
@@ -77,17 +76,18 @@ const PatientSearch = forwardRef(
                     )}
 
                     {!loading && value && (
-                        <button
-                            type="button"
-                            className="patient-search__clear"
+                        <button 
+                            type="buutton"
+                            className="patient-search-clear"
                             onClick={handleClear}
                             disabled={disabled}
                             aria-label="Clear search"
                         >
-                            ×
+                            X
                         </button>
                     )}
                 </div>
+                    
             </div>
         );
     }
@@ -96,3 +96,5 @@ const PatientSearch = forwardRef(
 PatientSearch.displayName = "PatientSearch";
 
 export default PatientSearch;
+
+
