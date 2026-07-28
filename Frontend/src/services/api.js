@@ -1,22 +1,31 @@
-//src/services/api.js 
+/* ************************* */
+/* File: src/services/api.js */ 
+/* ************************* */
+
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3000/api', // URL de votre backend
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000/api/v1",
+    timeout: 30000,
+
     headers: {
-        'Content-Type': 'application/json',
+        'Content-type': 'appointment/json',
+        Accept: "appointment/json",
     },
 });
 
-// Optional : Add token automatically if using authentication later
+// Optional: Add token automatically if using authentication later 
 api.interceptors.request.use(config => {
-    const token = localStorage.getItem('token'); // Assuming you store the token in localStorage
+    const token = localStorage.getItem('token'); // Assumming tyou store the token in localStorage 
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }
+
     return config;
 }, error => {
     return Promise.reject(error);
 });
 
 export default api;
+
+
