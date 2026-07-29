@@ -14,7 +14,12 @@ import {
     useMedicine,
 } from "../hooks";
 
+import {
+    PHARMACY_ROUTES,
+} from "../constants";
+
 const MedicineDetails = () => {
+
     const navigate = useNavigate();
 
     const { medicineId } = useParams();
@@ -80,6 +85,10 @@ const MedicineDetails = () => {
         }
     };
 
+    /* ---------------------------------- */
+    /* Loading State                      */
+    /* ---------------------------------- */
+
     if (loading) {
         return (
             <div className="medicine-details-page">
@@ -90,6 +99,9 @@ const MedicineDetails = () => {
         );
     }
 
+    /* ---------------------------------- */
+    /* Error State                        */
+    /* ---------------------------------- */
     if (error) {
         return (
             <div className="medicine-details-page">
@@ -110,6 +122,9 @@ const MedicineDetails = () => {
         );
     }
 
+    /* ---------------------------------- */
+    /*  Empty State                       */
+    /* ---------------------------------- */
     if (!medicine) {
         return (
             <div className="medicine-details-page">

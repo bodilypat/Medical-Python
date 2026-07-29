@@ -24,7 +24,10 @@ const CreateMediicine = () => {
     /* ---------------------------------- */
     const handleSubmit = async (formData) => {
 
+        setError(null);
+
         try {
+            
             await addMedicine(formData);
 
             navigate(
@@ -38,6 +41,10 @@ const CreateMediicine = () => {
                 "Failed to create medicine:",
                 error 
             );
+
+            setError( 
+                error.message ?? "Unable to create medicine."
+            )
         }
     };
 
