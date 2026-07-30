@@ -1,8 +1,7 @@
-/* ************************************************************ */
+/* ****************************************************************** */
 /* File: src/features/prescriptions/components/PrescriptionSearch.jsx */
-/* ************************************************************ */
-
-import PropTypes from "prop-types";
+/* ****************************************************************** */
+import PropType from "prop-types";
 import { useState, useEffect } from "react";
 
 const PrescriptionSearch = ({
@@ -23,7 +22,7 @@ const PrescriptionSearch = ({
     }, [value]);
 
     /* ---------------------------------- */
-    /* Debounced search                   */
+    /* Dashboard search                   */
     /* ---------------------------------- */
     useEffect(() => {
 
@@ -32,11 +31,9 @@ const PrescriptionSearch = ({
             if (onChange) {
                 onChange(keyword);
             }
-
         }, delay);
 
         return () => clearTimeout(timer);
-
     }, [keyword, delay, onChange]);
 
     /* ---------------------------------- */
@@ -45,23 +42,19 @@ const PrescriptionSearch = ({
     const handleClear = () => {
 
         setKeyword("");
-
         onChange?.("");
-
         onClear?.();
-
     };
 
     return (
+
         <div className="prescription-search">
-
             <div className="search-input-group">
-
                 <span className="search-icon">
-                    🔍
+                      🔍
                 </span>
 
-                <input
+                <input 
                     type="search"
                     className="search-input"
                     placeholder={placeholder}
@@ -72,34 +65,27 @@ const PrescriptionSearch = ({
                 />
 
                 {keyword && (
-                    <button
+                    <button 
                         type="button"
                         className="search-clear"
                         onClick={handleClear}
                         aria-label="Clear search"
                     >
-                        ✕
+                        X
                     </button>
                 )}
-
             </div>
-
         </div>
     );
 };
 
 PrescriptionSearch.propTypes = {
-
     value: PropTypes.string,
-
-    onChange: PropTypes.func,
-
+    onChange:PrpTypes.string,
     onClear: PropTypes.func,
-
     placeholder: PropTypes.string,
-
     delay: PropTypes.number,
-
 };
 
 export default PrescriptionSearch;
+
