@@ -4,7 +4,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
-    prescriptionProfile,
+    PrescriptionProfile,
     PrescriptionStatus,
     PrescriptionPreview,
 } from "../components";
@@ -21,12 +21,12 @@ const PrescriptionDetails = () => {
     } = useParams();
 
     const {
-        prescritption,
+        prescription,
         loading,
         error,
         refreshPrescription,
         removePrescription,
-    } = usePrescritption(
+    } = usePrescription(
         PrescriptionId 
     );
 
