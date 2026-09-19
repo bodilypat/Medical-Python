@@ -159,9 +159,9 @@ Fullstack-Medical-Management System(MMS)  React => Features => Service(Axios) =>
 │   │	│   │   │   ├── useRecentAppointments.js
 │   │   │   │   │   └── index.js
 │   │   │   │   ├── services/
-│   │   │   │   │   └── dashboard.services.js 
+│   │   │   │   │   └── dashboardServices.js 
 │   │   │   │   ├── store/
-│   │   │   │   │   └── dashboard.store.js 
+│   │   │   │   │   └── dashboardStore.js 
 │   │   │   │   ├── constants/
 │   │	│   │   │   ├── dashboardCards.js 
 │   │	│   │   │   ├── dashboardWidgets.js
