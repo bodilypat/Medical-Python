@@ -4,99 +4,149 @@ Fullstack-Medical-Management System(MMS)  React => Features => Service(Axios) =>
 │   ├── public/
 │   │   ├── favicon.ico
 │   │   ├── logo.png
+│   │   ├── manifest.json
 │   │   └── index.html
 │   ├── src/
+│   │   ├── app/  
+│   │   │   ├── App.jsx
+│   │   │   ├── main.jsx 
+│   │   │   ├── providers/
+│   │   │   │   ├── AuthProvider.jsx
+│   │   │   │   ├── QueryProvider.jsx 
+│   │   │   │   ├── ThemeProvider.jsx
+│   │   │   │   └── NotificationProvider.jsx 
+│   │   │   ├── router/
+│   │   │   │   ├── AppRouter.jsx
+│   │   │   │   ├── ProtectedRoute.jsx 
+│   │   │   │   ├── PublicRoute.jsx
+│   │   │   │   ├── RoleRoute.jsx 
+│   │   │   │   └── route.js
+│   │   │   └── config/
+│   │   │       ├── env.js
+│   │   │       ├── app.config.js 
+│   │   │       └── api.config.js 
+│   │   │
 │   │   ├── assets/  
-│   │   │   ├── image/
-│   │   │   │   └── ...
+│   │   │   ├── images/
 │   │   │   ├── icons/
-│   │   │   │   └── ...
 │   │   │   ├── fonts/
 │   │   │   └── styles/
-│   │   │       ├── globals.css
-│   │   │       ├── variables.css
-│   │   │       ├── theme.css
-│   │   │       └── animations.css
+│   │   │       ├── global.css  
+│   │   │       ├── variables.css 
+│   │   │       ├── theme.css 
+│   │   │       ├── utilities.css 
+│   │   │       └── animations.css 
 │   │   │
 │   │   ├── components/  
-│   │   │   ├── common/
-│   │   │   ├── forms/
-│   │   │   │   └── 
-│   │   │   ├── tables/ 
-│   │   │   │   └── 
-│   │   │   ├── charts/
-│   │   │   │   └── 
-│   │   │   ├── cards/
+│   │   │   ├── ui/
+│   │   │   │   ├── Button.jsx
+│   │   │   │   ├── Input.jsx 
+│   │   │   │   ├── Select.jsx 
+│   │   │   │   ├── Table.jsx 
+│   │   │   │   ├── Card.jsx  
+│   │   │   │   ├── Badge.jsx 
+│   │   │   │   ├── Spinner.jsx 
+│   │   │   │   └── EmptyState.jsx 
 │   │   │   ├── layout/
-│   │   │   └── modals/
-│   │   │       └── 
+│   │   │   │   ├── AppLayout.jsx
+│   │   │   │   ├── AuthLayout.jsx 
+│   │   │   │   ├── DashboardLayout.jsx 
+│   │   │   │   ├── Sidebar.jsx
+│   │   │   │   ├── Header.jsx 
+│   │   │   │   ├── Footer.jsx
+│   │   │   │   ├── Breadcrumbs.jsx 
+│   │   │   │   └── pageContainer.jsx 
+│   │   │   ├── forms/
+│   │   │   │   ├── FormField.jsx
+│   │   │   │   ├── FormError.jsx 
+│   │   │   │   └── FormActions.jsx
+│   │   │   ├── feedback/
+│   │   │   │   ├── ErrorBoundary.jsx
+│   │   │   │   ├── ErrorMessage.jsx 
+│   │   │   │   ├── LoadingState.jsx 
+│   │   │   │   ├── EmptyState.jsx 
+│   │   │   │   └── confirmationdialog.jsx
+│   │   │   └── data-display/
+│   │   │       ├── DataTable.jsx
+│   │   │       ├── DataCard.jsx 
+│   │   │       ├── StatusBadge.jsx 
+│   │   │       └── Timeline.jsx
 │   │   │
 │   │   ├── features/                        
 │   │   │   ├── auth/     => Login.jsx -> LogingForm.jsx -> useLogin.js -> auth.store.js -> auth.service.js -> Axios(api.js)         
-│   │   │   │   ├── pages/  
-│   │	│   │   │   ├── Login.jsx          
-│   │	│   │   │   ├── Register.jsx 
-│   │	│   │   │   ├── ForgotPassword.jsx 
-│   │	│   │   │   ├── ResetPassword.jsx
-│   │	│   │   │   ├── VerifyEmail.jsx 
-│   │   │   │   │   └── index.js
 │   │   │   │   ├── components/
 │   │	│   │   │   ├── LoginForm.jsx
 │   │	│   │   │   ├── RegisterForm.jsx
 │   │	│   │   │   ├── ForgotPasswordForm.jsx 
 │   │	│   │   │   ├── ResetPasswordForm.jsx
 │   │	│   │   │   ├── PasswordInput.jsx 
-│   │	│   │   │   ├── AuthLayout.jsx 
-│   │	│   │   │   ├── AuthBanner.jsx 
-│   │   │   │   │   └── index.js
+│   │   │   │   │   └── ProtectedRoute.jsx 
+│   │   │   │   ├── pages/  
+│   │	│   │   │   ├── Login.jsx          
+│   │	│   │   │   ├── Register.jsx 
+│   │	│   │   │   ├── ForgotPassword.jsx 
+│   │	│   │   │   ├── ResetPassword.jsx
+│   │	│   │   │   ├── VerifyEmail.jsx 
+│   │   │   │   │   └── 
 │   │   │   │   ├── hooks/
 │   │	│   │   │   ├── useAuth.js
 │   │	│   │   │   ├── useLogin.js 
 │   │	│   │   │   ├── useRegister.js 
 │   │	│   │   │   ├── useForgotPassword.js 
 │   │	│   │   │   ├── useResetPassword.js 
-│   │   │   │   │   └── index.js
+│   │   │   │   │   └── 
 │   │   │   │   ├── services/
-│   │   │   │   │   └── auth.service.js
+│   │   │   │   │   └── authservice.js
 │   │   │   │   ├── store/
 │   │   │   │   │   └── auth.store.js
 │   │   │   │   ├── utils/
-│   │	│   │   │   ├── authValidation.js 
-│   │	│   │   │   ├── authHelpers.js 
-│   │	│   │   │   ├── authFormatter.js 
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── validation.js 
+│   │	│   │   │   ├── helpers.js 
+│   │	│   │   │   ├── formatter.js 
+│   │   │   │   │   └── 
 │   │   │   │   ├── constants/
-│   │	│   │   │   ├── authRoles.js 
-│   │	│   │   │   ├── authPermission.js 
-│   │	│   │   │   ├── authConstants.js 
-│   │   │   │   │   └── index.js 
+│   │	│   │   │   ├── roles.js 
+│   │	│   │   │   ├── permission.js
+│   │	│   │   │   ├── auth.js
+│   │   │   │   │   └──  
 │   │   │   │   ├── router/
-│   │   │   │   │   └── auth.store.js
+│   │   │   │   │   └── auth.routes.jsx
+│   │   │   │   ├── tests/ 
+│   │	│   │   │   ├── Login.test.jsx 
+│   │	│   │   │   ├── Register.test.jsx 
+│   │   │   │   │   └── useLogin.js
 │   │   │   │   ├── styles/
-│   │	│   │   │   ├── Login.css 
-│   │	│   │   │   ├── Register.css 
-│   │	│   │   │   ├── AuthLayout.css 
-│   │   │   │   │   └── AuthForm.css
+│   │	│   │   │   ├── auth.css 
+│   │	│   │   │   ├── form.css  
+│   │   │   │   │   └── layout.css
 │   │   │   │   └── index.js   
 │   │   │   ├── dashboard/
 │   │   │   │   ├── pages/
-│   │	│   │   │   ├── Dashboard.jsx 
-│   │	│   │   │   ├── AdminDashboard.jsx 
-│   │	│   │   │   ├── DoctorDashboard.jsx
-│   │	│   │   │   ├── PatientDashboard.jsx
+│   │	│   │   │   ├── Dashboard.jsx                                # Main dashboard router/container
+│   │	│   │   │   ├── AdminDashboard.jsx                           # Admin view 
+│   │	│   │   │   ├── DoctorDashboard.jsx                          # Doctor view 
+│   │	│   │   │   ├── PatientDashboard.jsx                         # Patient partal view 
 │   │   │   │   │   └── index.js
 │   │   │   │   ├── components/
 │   │	│   │   │   ├── DashboardHeader.jsx 
 │   │	│   │   │   ├── DashboardStats.jsx 
 │   │	│   │   │   ├── StatisticCard.jsx
 │   │	│   │   │   ├── SummaryCard.jsx
-│   │	│   │   │   ├── AppointmentSummary.jsx 
-│   │	│   │   │   ├── RecentPatients.jsx 
-│   │	│   │   │   ├── RecentAppointments.jsx 
-│   │	│   │   │   ├── RecentPresctiption.jsx
-│   │	│   │   │   ├── RevenueChart.jsx 
-│   │	│   │   │   ├── PatientChart.jsx 
-│   │	│   │   │   ├── AppointmentChart.jsx
+│   │	│   │   │   ├── appointments/
+│   │	│   │   │   │   ├── AppointmentSummary.jsx
+│   │	│   │   │   │   ├── RecentAppointment.jsx
+│   │   │   │   │   │   └── index.js
+│   │	│   │   │   ├── Patients/
+│   │	│   │   │   │   ├── RecentPatients.jsx
+│   │   │   │   │   │   └── index.js
+│   │	│   │   │   ├── prescriptions/
+│   │	│   │   │   │   ├── RecentPrescriptions.jsx
+│   │   │   │   │   │   └── index.js
+│   │	│   │   │   ├── charts/
+│   │	│   │   │   │   ├── RevenueChart.jsx
+│   │	│   │   │   │   ├── PatientChart.jsx
+│   │	│   │   │   │   ├── AppointmentChart.jsx
+│   │   │   │   │   │   └── index.js
 │   │	│   │   │   ├── NotificationPanel.jsx 
 │   │	│   │   │   ├── QuickActions.jsx
 │   │	│   │   │   ├── ActivityTimeLine.jsx
@@ -115,6 +165,7 @@ Fullstack-Medical-Management System(MMS)  React => Features => Service(Axios) =>
 │   │   │   │   ├── constants/
 │   │	│   │   │   ├── dashboardCards.js 
 │   │	│   │   │   ├── dashboardWidgets.js
+│   │	│   │   │   ├── dashboardRoles.js
 │   │   │   │   │   └── index.js 
 │   │   │   │   ├── utils/
 │   │	│   │   │   ├── dashboardHelpers.js 
@@ -129,650 +180,295 @@ Fullstack-Medical-Management System(MMS)  React => Features => Service(Axios) =>
 │   │   │   │   │   └── dashboardWidgets.css 
 │   │   │   │   └── index.js
 │   │   │   ├── patients/
-│   │	│   │   ├── pages/
-│   │	│   │   │   ├── Patients.jsx                             # Coordinates the pages
-│   │	│   │   │   ├── PatientDetails.jsx                       # Patient profile/details
-│   │	│   │   │   ├── CreatePatient.jsx                        # Optional
-│   │	│   │   │   ├── EditPatient.jsx                          # Optional
-│   │   │   │   │   └── index.js
 │   │	│   │   ├── components/
+│   │	│   │   │   ├── PatientForm.jsx
 │   │	│   │   │   ├── PatientTable.jsx
-│   │	│   │   │   ├── PatientModal.jsx
-│   │	│   │   │   ├── PatientForm.jsx                              
-│   │	│   │   │   ├── PatientCard.jsx
+│   │	│   │   │   ├── PatientCard.jsx                              
 │   │	│   │   │   ├── PatientSearch.jsx
-│   │	│   │   │   ├── PatientFilter.jsx
-│   │	│   │   │   ├── PatientProfile.jsx
-│   │	│   │   │   ├── PatientAvator.jsx
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── hooks/                                       # Handles business logic and state management and data fetching
-│   │	│   │   │   ├── usePatients.js
-│   │	│   │   │   ├── usePatient.js 
-│   │	│   │   │   ├── usePatientSearch.js
-│   │	│   │   │   ├── usePatientForm.js
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── services/                                    # Handles HTTP Requests using the shared Axios instance
-│   │   │   │   │   └── patient.service.js
-│   │	│   │   ├── store/                                       # Feature-specific global state
-│   │   │   │   │   └── patient.store.js
-│   │	│   │   ├── utils/
-│   │	│   │   │   ├── patientColumns.js
-│   │	│   │   │   ├── patientFormatter.js
-│   │	│   │   │   ├── patientHelper.js 
-│   │	│   │   │   ├── patientValidation.js
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── router/                                      # Route definitions for the Patients feature
-│   │   │   │   │   └── patient.routes.js
-│   │	│   │   ├── styles/             
-│   │	│   │   │   ├── Patient.css 
-│   │	│   │   │   ├── PatientTable.css 
-│   │	│   │   │   ├── PatientForm.css                       
-│   │   │   │   │   └── PatientModal.css
-│   │   │   │   └── index.js                                     # Barrel file that exports the feature's public API.
-│   │   │   ├── doctors/
+│   │	│   │   │   ├── PatientFilters.jsx
+│   │	│   │   │   ├── PatientDetails.jsx
+│   │	│   │   │   ├── MedicalHistory.jsx
+│   │   │   │   │   └── EmergencyContact.jsx 
 │   │	│   │   ├── pages/
-│   │	│   │   │   ├── Doctors.jsx                              # Doctor list & management
-│   │	│   │   │   ├── DoctorDetails.jsx                        # Doctor Profile/details
-│   │	│   │   │   ├── CreateDoctor.jsx                         # Create doctor 
-│   │	│   │   │   ├── EditDoctor.jsx                           # Update doctor
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── Patients.jsx                             
+│   │	│   │   │   ├── AddPatient.jsx                       
+│   │	│   │   │   ├── EditPatient.jsx                                                  
+│   │   │   │   │   └── PatientDetails.jsx
+│   │	│   │   ├── hooks/                                       
+│   │	│   │   │   ├── usePatients.js 
+│   │   │   │   │   └── usePatient.js
+│   │	│   │   ├── services/                                    
+│   │   │   │   │   └── patientService.js 
+│   │	│   │   ├── validation/                                       
+│   │   │   │   │   └── patientSchema.js
+│   │   │   │   └── index.js                                    
+│   │   │   ├── doctors/
 │   │	│   │   ├── components/
-│   │	│   │   │   ├── DoctorTable.jsx                          # Doctors listing table 
-│   │	│   │   │   ├── DoctortModal.jsx                         # Modal wrapper
-│   │	│   │   │   ├── DoctorForm.jsx                           # Add/Edit doctor form
-│   │	│   │   │   ├── DoctorCard.jsx                           # Doctor profile view 
-│   │	│   │   │   ├── DoctorProfile.jsx                        # Dashboard/card dusplay
-│   │	│   │   │   ├── DoctorSearch.jsx                         # Search component 
-│   │	│   │   │   ├── DoctorFilter.jsx                         # Filter component
-│   │	│   │   │   ├── DoctorSchedule.jsx                       # Availability/schedule 
-│   │	│   │   │   ├── DoctorSpecialBadge.jsx                   # Specialty display 
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── DoctorTable.jsx                          
+│   │	│   │   │   ├── DoctortModal.jsx                         
+│   │	│   │   │   ├── DoctorForm.jsx                          
+│   │	│   │   │   ├── DoctorCard.jsx                           
+│   │	│   │   │   ├── DoctorProfile.jsx                        
+│   │	│   │   │   ├── DoctorSearch.jsx                         
+│   │	│   │   │   ├── DoctorFilters                       
+│   │	│   │   │   ├── DoctorDetails.jsx                  
+│   │	│   │   │   ├── DoctorSchedule.jsx                    
+│   │   │   │   │   └── DoctorAvailbility.jsx
+│   │	│   │   ├── pages/
+│   │	│   │   │   ├── Doctors.jsx                                                    
+│   │	│   │   │   ├── AddDoctor.jsx                        
+│   │	│   │   │   ├── EditDoctor.jsx                           
+│   │   │   │   │   └── DoctorDetails.jsx
 │   │	│   │   ├── hooks/
-│   │	│   │   │   ├── useDoctors.js                            # Doctor list & management
-│   │	│   │   │   ├── useDoctor.js                             # Single doctor logic
-│   │	│   │   │   ├── useDoctorForm.js                         # Form state handling
-│   │	│   │   │   ├── useDoctorSearch.js                       # Search logic
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── useDoctors.js 
+│   │	│   │   │   ├── useDoctor.js 
+│   │   │   │   │   └── useDoctorSchedule.js
 │   │	│   │   ├── services/
-│   │	│   │   │   ├── doctor.service.js                        # HTTP requests
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── store/
-│   │	│   │   │   ├── doctor.store.js                          # Optional features state
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── utils/
-│   │	│   │   │   ├── doctorColumns.js                         # Table configuration 
-│   │	│   │   │   ├── doctorConstants.js                       # Constants
-│   │	│   │   │   ├── doctorValidation.js                      # Form validation
-│   │	│   │   │   ├── doctorFormatter.js                       # Data Information
-│   │	│   │   │   ├── doctorHelper.js                          # Helper functions
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── routes/
-│   │   │   │   │   └── doctor.routes.js
-│   │	│   │   ├── styles/
-│   │	│   │   │   ├── Doctor.css 
-│   │	│   │   │   ├── DoctorForm.css 
-│   │	│   │   │   ├── DoctorTable.css 
-│   │   │   │   │   └── DoctorProfile.css 
+│   │   │   │   │   └── doctorService.js 
+│   │	│   │   ├── validation/                    
+│   │   │   │   │   └── doctorSchema.js 
+│   │	│   │   ├── types/
+│   │   │   │   │   └── doctorTypes.js
 │   │   │   │   └── index.js
 │   │   │   ├── appointments/
-│   │	│   │   ├── index.js                                    # Public exports
-│   │	│   │   ├── pages/
-│   │	│   │   │   ├── Appointment.jsx                         # Appointment list & management 
-│   │	│   │   │   ├── AppointmentDetails.jsx                  # Appointment profile/details 
-│   │	│   │   │   ├── CreateAppointment.jsx                   # Schedule appointment
-│   │	│   │   │   ├── EditAppointment.jsx                     # Update appointment
-│   │	│   │   │   ├── Calendar.jsx                            # Calendar scheduling view
-│   │   │   │   │   └── index.js
 │   │	│   │   ├── components/
-│   │	│   │   │   ├── AppointmentTable                        # Appointment list table
-│   │	│   │   │   ├── AppointmentForm.jsx                     # Create/Edit form 
-│   │	│   │   │   ├── AppointmentModal.jsx                    # Modal wrapper 
-│   │	│   │   │   ├── AppointmentProfile.jsx                  # Appointment details display 
-│   │	│   │   │   ├── AppointmentCard.jsx                     # Dashboard Card view 
-│   │	│   │   │   ├── AppointmentCalendar.jsx                 # Calendar UI 
-│   │	│   │   │   ├── AppointmentStatus.jsx                   # Status badge 
-│   │	│   │   │   ├── DoctorSelector.jsx                      # Select doctor 
-│   │	│   │   │   ├── PatientSelector.jsx                     # Select patient
-│   │	│   │   │   ├── TimeSlotSelector.jsx                    # Select availability slot 
-│   │	│   │   │   ├── AppointmentFilter.jsx                   # Filter appointments
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── AppointmentForm.jsx 
+│   │	│   │   │   ├── AppointmentTable.jsx                      
+│   │	│   │   │   ├── AppointmentCard.jsx                     
+│   │	│   │   │   ├── AppointmentCalendar.jsx  
+│   │	│   │   │   ├── AppointmentDetails.jsx 
+│   │	│   │   │   ├── AppointmentStatus.jsx                  
+│   │	│   │   │   ├── AppointmentFilters.jsx
+│   │	│   │   │   ├── AppointmentSearch.jsx
+│   │	│   │   │   ├── AppointmentAvailability.jsx
+│   │   │   │   │   └── TimeSlotPicker.jsx
+│   │	│   │   ├── pages/
+│   │	│   │   │   ├── Appointments.jsx                         
+│   │	│   │   │   ├── BookingAppointment.jsx                      
+│   │	│   │   │   ├── EditAppointment.jsx                   
+│   │   │   │   │   └── AppointmentDetails.jsx 
 │   │	│   │   ├── hooks/
-│   │	│   │   │   ├── useAppointment.jsx                      # Appointment list CRUD logic
-│   │	│   │   │   ├── useAppointment.js                       # Single appointment logic 
-│   │	│   │   │   ├── useAppointmnetForm.jsx                  # Form state handling 
-│   │	│   │   │   ├── useAppointmentCalendar.jsx              # Calendar logic 
-│   │	│   │   │   ├── useAvailableSlots.jsx                   # Doctor availability logic
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── useAppointments.js 
+│   │	│   │   │   ├── useAppointment.js                      
+│   │	│   │   │   ├── useAvailability.js
+│   │   │   │   │   └── useAppointmentCalendar.js 
 │   │	│   │   ├── services/
-│   │	│   │   │   ├── appointment.service.js                  # API requests
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── utils/
-│   │	│   │   │   ├── appointmentColumn.js                    # Table column 
-│   │	│   │   │   ├── appointmentConstants.js                 # Status constants
-│   │	│   │   │   ├── appointmentValidation.js                # Form validation 
-│   │	│   │   │   ├── appointmentFormatter.js                 # Date/time formatting 
-│   │	│   │   │   ├── appointmentHelper.js                    # Helper functions
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── store/
-│   │   │   │   │   └── appointment.store.js 
-│   │   │   │   └── styles/
-│   │	│   │       ├── Appointment.css
-│   │	│   │       ├── Appointment.css 
-│   │	│   │       ├── AppointmentTable.css
-│   │   │   │       └── Calendar.css
+│   │   │   │   │   └── appointmentService.js
+│   │   │   │   ├── validation/
+│   │   │   │   │   └── appointmentSchema.js 
+│   │   │   │   ├── types/
+│   │   │   │   │   └── appointmentTypes.js 
+│   │   │   │   └── index.js
+│   │   │   │   
+│   │   │   ├── medical-records/
+│   │	│   │   ├── components/
+│   │	│   │   │   ├── MedicalRecordForm.jsx 
+│   │	│   │   │   ├── MedicalRecordTable.jsx                      
+│   │	│   │   │   ├── MedicalRecordCard.jsx                     
+│   │	│   │   │   ├── MedicalRecordDetails.jsx  
+│   │	│   │   │   ├── MedicalHistory.jsx 
+│   │	│   │   │   ├── VitalSigns.jsx                  
+│   │	│   │   │   ├── DiagnosisList.jsx
+│   │	│   │   │   ├── TreatmentPlan.jsx
+│   │	│   │   │   ├── FollowUp.jsx
+│   │	│   │   │   ├── RecordSearch.jsx
+│   │   │   │   │   └── RecordFilters.jsx 
+│   │	│   │   ├── pages/
+│   │	│   │   │   ├── MedicalRecords.jsx                         
+│   │	│   │   │   ├── AddMedicalRecord.jsx                      
+│   │	│   │   │   ├── EditMedicalRecord.jsx                   
+│   │   │   │   │   └── MedicalRecordDetails.jsx 
+│   │	│   │   ├── hooks/
+│   │	│   │   │   ├── useMedicalRecords.js                      
+│   │	│   │   │   ├── useMedicalRecord.js
+│   │   │   │   │   └── usePatientHistory.js 
+│   │	│   │   ├── services/
+│   │   │   │   │   └── medicalRecordService.js
+│   │   │   │   ├── validation/
+│   │   │   │   │   └── medicalRecordSchema.js 
+│   │   │   │   ├── types/
+│   │   │   │   │   └── medicalRecordTypes.js 
+│   │   │   │   └── index.js
 │   │   │   │   
 │   │   │   ├── prescriptions/
-│   │	│   │   ├── index.js                                    # Public exports
-│   │	│   │   ├── pages/
-│   │	│   │   │   ├── Prescriptions.jsx                        # Prescription list & management 
-│   │	│   │   │   ├── PrescriptionDetails.jsx                  # Prescription details/profile 
-│   │	│   │   │   ├── CreatePrescription.jsx                   # Create prescription
-│   │	│   │   │   ├── EditPrescription.jsx                     # Update prescription
-│   │	│   │   │   ├── PrescriptionHistory.jsx                  # Patient prescription history
-│   │   │   │   │   └── index.js
 │   │	│   │   ├── components/
-│   │	│   │   │   ├── PrescriptionTable.jsx                    # Prescription list table 
-│   │	│   │   │   ├── PrescriptionForm.jsx                     # Create/Edit form 
-│   │	│   │   │   ├── PrescriptionModal.jsx                    # Modal wrapper 
-│   │	│   │   │   ├── PrescriptionProfile.jsx                  # Prescription details view 
-│   │	│   │   │   ├── PrescriptionCard.jsx                     # Summary card 
-│   │	│   │   │   ├── MedicineSelector.jsx                     # Select medicines
-│   │	│   │   │   ├── MedicineList.jsx                         # Select Medicine List
-│   │	│   │   │   ├── DosageInput.jsx                          # Dosage configuration
-│   │	│   │   │   ├── FrequencySelector.jsx                    # Medicine frequency 
-│   │	│   │   │   ├── DurationInput.jsx                        # Treament duration 
-│   │	│   │   │   ├── PrescriptionPrint.jsx                    # Printable prescription 
-│   │	│   │   │   ├── PrescriptionStatus.jsx                   # Status badge 
-│   │	│   │   │   ├── PrescriptionFilter.jsx                   # Search/filter
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── hooks/
-│   │	│   │   │   ├── usePrescriptions.js                      # Prescription list CRUD logic 
-│   │	│   │   │   ├── usePrescription.js                       # Single prescription logic 
-│   │	│   │   │   ├── usePrescriptionForm.js                   # Form state management
-│   │	│   │   │   ├── usePrescriptionMedicine.js               # Medicine items management
-│   │	│   │   │   ├── usePrescriptionPrint                     # Print/export logic
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── services/
-│   │	│   │   │   ├── prescription.service.js                  # API requests
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── utils/
-│   │	│   │   │   ├── prescriptionColumns.js                   # Table configuration 
-│   │	│   │   │   ├── prescriptConstants.js                    # Status constants 
-│   │	│   │   │   ├── prescriptionValidation.js                # Form validation 
-│   │	│   │   │   ├── prescriptionFormatter.js                 # Medicine items manaement 
-│   │	│   │   │   ├── usePrescriptionHelper.js                 # Utility functions
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── store/
-│   │   │   │   │   └── prescription.store.js
-│   │   │   │   └── styles/
-│   │	│   │       ├── Prescription.css 
-│   │	│   │       ├── PrescriptionForm.css 
-│   │	│   │       ├── PrescriptionTable.css 
-│   │   │   │       └── PrescriptionPrint.css
-│   │   │   │   
-│   │   │   ├── pharmacy/
-│   │	│   │   ├── index.js                                     # Public exports
+│   │	│   │   │   ├── PrescriptionForm.jsx 
+│   │	│   │   │   ├── PrescriptionTable.jsx                      
+│   │	│   │   │   ├── PrescriptionCard.jsx                     
+│   │	│   │   │   ├── PrescriptionDetails.jsx  
+│   │	│   │   │   ├── MedicineSelector.jsx 
+│   │	│   │   │   ├── MedicineRow.jsx                  
+│   │	│   │   │   ├── PrescriptionPreview.jsx
+│   │	│   │   │   ├── PrescriptionPrint.jsx
+│   │	│   │   │   ├── PrescriptionSearch.jsx
+│   │   │   │   │   └── PrescriptionFilters.jsx 
 │   │	│   │   ├── pages/
-│   │	│   │   │   ├── Pharmacy.jsx                             # Pharmacy dashboard 
-│   │	│   │   │   ├── Medicines.jsx                            # Medicine inventory management 
-│   │	│   │   │   ├── MedicineDetails.jsx                      # Medicine details 
-│   │	│   │   │   ├── CreateMedicine.jsx                       # Add medicine 
-│   │	│   │   │   ├── EditMedicine.jsx                         # Update medicine 
-│   │	│   │   │   ├── Inventory.jsx                            # Stock management 
-│   │	│   │   │   ├── StockMovement.jsx                        # Dispense prescription medicines 
-│   │	│   │   │   ├── Suppliers.jsx                            # Supplier management 
-│   │	│   │   │   ├── SupplierDetails.jsx                      # Supplier profile   
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── components/
-│   │	│   │   │   ├── MedicineTable.jsx                        # Medicine listing table 
-│   │	│   │   │   ├── MedicineForm.jsx                         # Add/Edit medicine form 
-│   │	│   │   │   ├── MedicineModal.jsx                        # Medicine modal wrapper  
-│   │	│   │   │   ├── MedicineProfile.jsx                      # Medicine details view
-│   │	│   │   │   ├── MedicineCard.jsx                         # Medicine summary card 
-│   │	│   │   │   ├── InventoryTable.jsx                       # Stock table 
-│   │	│   │   │   ├── StockAdjustmentForm.jsx                  # Increase/decrease stock 
-│   │	│   │   │   ├── StockStatus.jsx                          # Stock status badge
-│   │	│   │   │   ├── ExpiryAlert.jsx                          # Expiry warning 
-│   │	│   │   │   ├── CategorySelector.jsx                     # Medicine category selector 
-│   │	│   │   │   ├── SupplierSelector.jsx                     # Supplier selector 
-│   │	│   │   │   ├── PrescriptionDispense.jsx                 # Dispensing components
-│   │	│   │   │   ├── DispenseTable.jsx                        # Dispensing list 
-│   │	│   │   │   ├── PharmacyDashboardCard.jsx                # Dashboard widgets 
-│   │	│   │   │   ├── PharmacyFilter.jsx                       # Search/filter 
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── Prescriptions.jsx                         
+│   │	│   │   │   ├── CreatePrescription.jsx                      
+│   │	│   │   │   ├── EditPrescription.jsx                   
+│   │   │   │   │   └── PrescriptionDetails.jsx 
 │   │	│   │   ├── hooks/
-│   │	│   │   │   ├── usePharmacy.js                           # Pharmacy dashboard logic 
-│   │	│   │   │   ├── useMedicines.js                          # Medicine list CRUD logic 
-│   │	│   │   │   ├── useMedicine.jsx                          # Single medicine logic 
-│   │	│   │   │   ├── useInventory.js                          # Stock management logic
-│   │	│   │   │   ├── useStockMovement.jsx                     # Stock history logic 
-│   │	│   │   │   ├── useSuppliers.js                          # Supplier CRUD logic 
-│   │	│   │   │   ├── useSupplier.js                           # Single supplier logic 
-│   │	│   │   │   ├── useDispensing.js                         # Prescription dispensing logic 
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── usePrescriptions.js                      
+│   │	│   │   │   ├── usePrescription.js
+│   │   │   │   │   └── useMedicines.js 
 │   │	│   │   ├── services/
-│   │	│   │   │   ├── pharmacy.service.js                      # API requests 
-│   │	│   │   │   ├── medicine.service.js                      # Medicine API requests
-│   │	│   │   │   ├── inventory.service.js                     # Inventory API requests 
-│   │	│   │   │   ├── supplier.service.js                      # Supplier API requests 
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── utils/
-│   │	│   │   │   ├── medicineColumns.js                       # Medicine table columns 
-│   │	│   │   │   ├── inventoryColumns.js                      # Inventory table columns
-│   │	│   │   │   ├── pharmacyConstants.js                     # Status constants 
-│   │	│   │   │   ├── medicineValidation.js                    # Medicine validation 
-│   │	│   │   │   ├── inventoryValidation.js                   # Stock validation 
-│   │	│   │   │   ├── pharmacyFormatter.js                     # Date/currency formatter 
-│   │	│   │   │   ├── pharmacyHelper.js                        # Helper functions
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── store/
-│   │   │   │   │   └── pharmacy.store.js 
-│   │   │   │   └── styles/
-│   │	│   │       ├── Pharmacy.css
-│   │	│   │       ├── Medicine.css 
-│   │	│   │       ├── Inventory.css 
-│   │   │   │       └── Dispensing.css 
+│   │   │   │   │   └── prescriptionService.js
+│   │   │   │   ├── validation/
+│   │   │   │   │   └── prescriptionSchema.js 
+│   │   │   │   ├── types/
+│   │   │   │   │   └── prescriptionTypes.js 
+│   │   │   │   └── index.js
 │   │   │   │   
 │   │   │   ├── laboratory/
-│   │	│   │   ├── index.js                                     # Public exports
-│   │	│   │   ├── pages/
-│   │	│   │   │   ├── Laboratory.jsx                           # Laboratory dashboard 
-│   │	│   │   │   ├── LabTests.jsx                             # Test catalog management
-│   │	│   │   │   ├── LabTestDetails.jsx                       # Test information
-│   │	│   │   │   ├── CreateLabTest.jsx                        # Add new test type
-│   │	│   │   │   ├── EditLabTest.jsx                          # Update test information
-│   │	│   │   │   ├── LabOrders.jsx                            # Lab order management
-│   │	│   │   │   ├── LabOrderDetails.jsx                      # Order details
-│   │	│   │   │   ├── CreateLabOrder.jsx                       # Create lab request
-│   │	│   │   │   ├── EditLabOrder.jsx                         # Update lab order
-│   │	│   │   │   ├── SampleCollection.jsx                     # Sample tracking
-│   │	│   │   │   ├── ResultEntry.jsx                          # Enter test results
-│   │	│   │   │   ├── LabReports.jsx                           # Generated reports
-│   │	│   │   │   ├── PatientLabHistory.jsx                    # Patient test history
-│   │   │   │   │   └── index.js
 │   │	│   │   ├── components/
-│   │	│   │   │   ├── LabTestTable.jsx                         # Test catalog table
-│   │	│   │   │   ├── LabTestForm.jsx                          # Create/edit test form
-│   │	│   │   │   ├── LabTestModal.jsx                         # Modal wrapper
-│   │	│   │   │   ├── LabTestProfile.jsx                       # Test details
-│   │	│   │   │   │
-│   │	│   │   │   ├── LabOrderTable.jsx                        # Lab order list
-│   │	│   │   │   ├── LabOrderForm.jsx                         # Create/edit order
-│   │	│   │   │   ├── LabOrderModal.jsx                        # Order modal
-│   │	│   │   │   ├── LabOrderProfile.jsx                      # Order details
-│   │	│   │   │   │
-│   │	│   │   │   ├── TestSelector.jsx                         # Select laboratory tests
-│   │	│   │   │   ├── PatientSelector.jsx                      # Select patient
-│   │	│   │   │   ├── DoctorSelector.jsx                       # Select requesting doctor
-│   │	│   │   │   ├── SampleStatus.jsx                         # Sample status badge
-│   │	│   │   │   ├── ResultForm.jsx                           # Enter results
-│   │	│   │   │   ├── ResultTable.jsx                          # Results display
-│   │	│   │   │   ├── ReportViewer.jsx                         # View lab reports
-│   │	│   │   │   ├── ReportPrint.jsx                          # Print/export report
-│   │	│   │   │   ├── LabDashboardCard.jsx                     # Dashboard widgets
-│   │	│   │   │   ├── LabFilter.jsx                            # Search/filter
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── hooks/
-│   │	│   │   │   ├── useLaboratory.js                         # Laboratory dashboard logic
-│   │	│   │   │   ├── useLabTests.js                           # Lab test CRUD logic
-│   │	│   │   │   ├── useLabTest.js                            # Single test logic
-│   │	│   │   │   ├── useLabOrders.js                          # Lab order list logic
-│   │	│   │   │   ├── useLabOrder.js                           # Single order logic
-│   │	│   │   │   ├── useLabResult.js                          # Result entry/update logic
-│   │	│   │   │   ├── useSampleCollection.js                   # Sample tracking logic
-│   │	│   │   │   ├── useLabReports.js                         # Report generation logic
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── services/
-│   │	│   │   │   ├── laboratory.service.js                    # Laboratory API requests
-│   │	│   │   │   ├── labTest.service.js                       # Test API requests
-│   │	│   │   │   ├── labOrder.service.js                      # Order API requests
-│   │	│   │   │   ├── labResult.service.js                     # Results API requests
-│   │	│   │   │   ├── labReport.service.js                     # Report API requests
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── utils/
-│   │	│   │   │   ├── labTestColumns.js                        # Test table columns
-│   │	│   │   │   ├── labOrderColumns.js                       # Order table columns
-│   │	│   │   │   ├── laboratoryConstants.js                   # Status constants
-│   │	│   │   │   ├── laboratoryValidation.js                  # Form validation
-│   │	│   │   │   ├── laboratoryFormatter.js                   # Date formatting
-│   │	│   │   │   ├── resultFormatter.js                       # Result formatting
-│   │	│   │   │   ├── laboratoryHelper.js                      # Helper functions
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── store/
-│   │   │   │   │   └── laboratory.store.js
-│   │   │   │   └── styles/
-│   │	│   │       ├── Laboratory.css
-│   │	│   │       ├── LabOrder.css
-│   │	│   │       ├── LabResult.css
-│   │   │   │       └── LabReport.css
-│   │   │   │   
-│   │   │   ├── billing/
-│   │	│   │   ├── index.js                              # Public exports
+│   │	│   │   │   ├── LabOrderForm.jsx 
+│   │	│   │   │   ├── LabOrderTable.jsx                      
+│   │	│   │   │   ├── LabOrderCard.jsx                     
+│   │	│   │   │   ├── LabOrderDetails.jsx  
+│   │	│   │   │   ├── LabTestSelector.jsx 
+│   │	│   │   │   ├── LabTestRow.jsx                  
+│   │	│   │   │   ├── SampleCollection.jsx
+│   │	│   │   │   ├── ResultForm.jsx
+│   │	│   │   │   ├── ResultTable.jsx
+│   │	│   │   │   ├── LabReportPreview.jsx 
+│   │	│   │   │   ├── LabSearch.jsx 
+│   │   │   │   │   └── LabFilters.jsx 
 │   │	│   │   ├── pages/
-│   │	│   │   │   ├── Billing.jsx                       # Billing dashboard
-│   │	│   │   │   ├── Invoices.jsx                      # Invoice management
-│   │	│   │   │   ├── InvoiceDetails.jsx                # Invoice details/profile
-│   │	│   │   │   ├── CreateInvoice.jsx                 # Generate invoice
-│   │	│   │   │   ├── EditInvoice.jsx                   # Update invoice
-│   │	│   │   │   ├── Payments.jsx                      # Payment management
-│   │	│   │   │   ├── PaymentDetails.jsx                # Payment details
-│   │	│   │   │   ├── Transactions.jsx                  # Transaction history
-│   │	│   │   │   ├── Refunds.jsx                       # Refund management
-│   │	│   │   │   ├── InsuranceClaims.jsx               # Insurance claim handling
-│   │	│   │   │   ├── BillingReports.jsx                # Revenue reports
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── components/
-│   │	│   │   │   ├── InvoiceTable.jsx                  # Invoice listing table
-│   │	│   │   │   ├── InvoiceForm.jsx                   # Create/edit invoice form
-│   │	│   │   │   ├── InvoiceModal.jsx                  # Invoice modal wrapper
-│   │	│   │   │   ├── InvoiceProfile.jsx                # Invoice details display
-│   │	│   │   │   ├── InvoiceCard.jsx                   # Invoice summary card
-│   │	│   │   │   │
-│   │	│   │   │   ├── PaymentTable.jsx                  # Payment list table
-│   │	│   │   │   ├── PaymentForm.jsx                   # Payment entry form
-│   │	│   │   │   ├── PaymentModal.jsx                  # Payment modal
-│   │	│   │   │   ├── PaymentStatus.jsx                 # Payment status badge
-│   │	│   │   │   │
-│   │	│   │   │   ├── BillingSummary.jsx                # Billing dashboard summary
-│   │	│   │   │   ├── BillingChart.jsx                  # Revenue charts
-│   │	│   │   │   ├── ServiceItemTable.jsx              # Invoice line items
-│   │	│   │   │   ├── DiscountInput.jsx                 # Discount handling
-│   │	│   │   │   ├── TaxCalculator.jsx                 # Tax calculation
-│   │	│   │   │   ├── InsuranceSelector.jsx             # Insurance selection
-│   │	│   │   │   ├── PaymentMethodSelector.jsx         # Payment method selector
-│   │	│   │   │   ├── ReceiptPrint.jsx                  # Receipt printing
-│   │	│   │   │   ├── InvoicePrint.jsx                  # Invoice printing
-│   │	│   │   │   ├── BillingFilter.jsx                 # Search/filter
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── LaboratoryPage.jsx                         
+│   │	│   │   │   ├── CreateLabOrderPage.jsx                      
+│   │	│   │   │   ├── LabOrderDetailsPage.jsx                   
+│   │	│   │   │   ├── LabResultPage.jsx 
+│   │   │   │   │   └── LabReportpage.jsx 
 │   │	│   │   ├── hooks/
-│   │	│   │   │   ├── useBilling.js                     # Billing dashboard logic
-│   │	│   │   │   ├── useInvoices.js                    # Invoice list CRUD logic
-│   │	│   │   │   ├── useInvoice.js                     # Single invoice logic
-│   │	│   │   │   ├── usePayments.js                    # Payment management logic
-│   │	│   │   │   ├── usePayment.js                     # Single payment logic
-│   │	│   │   │   ├── useTransactions.js                # Transaction history logic
-│   │	│   │   │   ├── useRefunds.js                     # Refund processing logic
-│   │	│   │   │   ├── useInsuranceClaims.js             # Insurance logic
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── useLabOrders.js                      
+│   │	│   │   │   ├── useLabOrder.js
+│   │	│   │   │   ├── useLabTests.js 
+│   │   │   │   │   └── useLabResults.js 
 │   │	│   │   ├── services/
-│   │	│   │   │   ├── billing.service.js                # Billing API requests
-│   │	│   │   │   ├── invoice.service.js                # Invoice API requests
-│   │	│   │   │   ├── payment.service.js                # Payment API requests
-│   │	│   │   │   ├── transaction.service.js            # Transaction API requests
-│   │	│   │   │   ├── refund.service.js                 # Refund API requests
-│   │	│   │   │   ├── insurance.service.js              # Insurance API requests
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── utils/
-│   │	│   │   │   ├── invoiceColumns.js                 # Invoice table columns
-│   │	│   │   │   ├── paymentColumns.js                 # Payment table columns
-│   │	│   │   │   ├── billingConstants.js               # Billing constants/status
-│   │	│   │   │   ├── billingValidation.js              # Form validation
-│   │	│   │   │   ├── billingFormatter.js               # Currency/date formatting
-│   │	│   │   │   ├── invoiceCalculator.js              # Amount calculations
-│   │	│   │   │   ├── receiptFormatter.js               # Receipt formatting
-│   │	│   │   │   ├── billingHelper.js                  # Helper functions
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── store/
-│   │   │   │   │   └── billing.store.js
-│   │   │   │   └── styles/
-│   │	│   │       ├── Billing.css
-│   │	│   │       ├── Invoice.css
-│   │	│   │       ├── Payment.css
-│   │   │   │       └── Receipt.css
-│   │   │   │   
+│   │   │   │   │   └── laboratoryService.js
+│   │   │   │   ├── validation/
+│   │	│   │   │   ├── labOrderSchema.js
+│   │   │   │   │   └── labResultSchema.js 
+│   │   │   │   ├── types/
+│   │   │   │   │   └── laboratoryTypes.js 
+│   │   │   │   └── index.js
+│   │   │   │      
+│   │   │   ├── billings/
+│   │	│   │   ├── components/
+│   │	│   │   │   ├── BillingForm.jsx 
+│   │	│   │   │   ├── BillingTable.jsx                      
+│   │	│   │   │   ├── BillingCard.jsx                     
+│   │	│   │   │   ├── BillingDetails.jsx  
+│   │	│   │   │   ├── InvoiceForm.jsx 
+│   │	│   │   │   ├── InvoicePreview.jsx                  
+│   │	│   │   │   ├── PaymentForm.jsx
+│   │	│   │   │   ├── PaymentHistory.jsx
+│   │	│   │   │   ├── PaymentStatus.jsx
+│   │	│   │   │   ├── RefundForm.jsx 
+│   │	│   │   │   ├── BillingSearch.jsx 
+│   │   │   │   │   └── BilingFilters.jsx 
+│   │	│   │   ├── pages/
+│   │	│   │   │   ├── BillingsPage.jsx                         
+│   │	│   │   │   ├── CreateInvoicePage.jsx                      
+│   │	│   │   │   ├── InvoiceDetailsPage.jsx                   
+│   │	│   │   │   ├── PaymentPage.jsx 
+│   │	│   │   │   ├── PaymentHistoryPage.jsx 
+│   │   │   │   │   └── RefundPage.jsx 
+│   │	│   │   ├── hooks/
+│   │	│   │   │   ├── useBillings.js                       
+│   │	│   │   │   ├── useBilling.js 
+│   │	│   │   │   ├── useInvoices.js  
+│   │   │   │   │   └── usePayments.js  
+│   │	│   │   ├── services/
+│   │   │   │   │   └── billingService.js
+│   │   │   │   ├── validation/
+│   │	│   │   │   ├── billingSchema.js
+│   │	│   │   │   ├── invoiceSchema.js 
+│   │   │   │   │   └── paymentSchema.js 
+│   │   │   │   ├── types/
+│   │   │   │   │   └── billingTypes.js 
+│   │   │   │   └── index.js
+│   │   │   │      
 │   │   │   ├── notifications/
-│   │	│   │   ├── index.js                              # Public exports
-│   │	│   │   ├── pages/
-│   │	│   │   │   ├── Notifications.jsx               # Notification dashboard
-│   │	│   │   │   ├── NotificationDetails.jsx         # Notification details
-│   │	│   │   │   ├── CreateNotification.jsx          # Create notification
-│   │	│   │   │   ├── EditNotification.jsx            # Edit notification
-│   │	│   │   │   ├── NotificationTemplates.jsx       # Template management
-│   │	│   │   │   ├── NotificationHistory.jsx         # Delivery history
-│   │	│   │   │   ├── NotificationSettings.jsx        # User preferences
-│   │   │   │   │   └── index.js
 │   │	│   │   ├── components/
-│   │	│   │   │   ├── NotificationTable.jsx
-│   │	│   │   │   ├── NotificationForm.jsx
-│   │	│   │   │   ├── NotificationModal.jsx
-│   │	│   │   │   ├── NotificationProfile.jsx
-│   │	│   │   │   ├── NotificationCard.jsx
-│   │	│   │   │   ├── NotificationBadge.jsx
-│   │	│   │   │   ├── NotificationFilter.jsx
-│   │	│   │   │   ├── NotificationTemplateForm.jsx
-│   │	│   │   │   ├── NotificationTemplateTable.jsx
-│   │	│   │   │   ├── NotificationSettingsForm.jsx
-│   │	│   │   │   ├── NotificationHistoryTable.jsx
-│   │	│   │   │   ├── EmailPreview.jsx
-│   │	│   │   │   ├── SmsPreview.jsx
-│   │	│   │   │   ├── PushPreview.jsx
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── NotificationBell.jsx 
+│   │	│   │   │   ├── NotificationBadge.jsx                      
+│   │	│   │   │   ├── NotificationDropDown.jsx                     
+│   │	│   │   │   ├── NotificationItem.jsx  
+│   │	│   │   │   ├── NotificationList.jsx 
+│   │	│   │   │   ├── NotificationCard.jsx                  
+│   │	│   │   │   ├── NotificationFilters.jsx
+│   │   │   │   │   └── NoticationPreferences.jsx 
+│   │	│   │   ├── pages/ 
+│   │	│   │   │   ├── NotificationsPage.jsx 
+│   │   │   │   │   └── NotificationsPage.jsx 
 │   │	│   │   ├── hooks/
-│   │	│   │   │   ├── useNotifications.js             # Notification list CRUD
-│   │	│   │   │   ├── useNotification.js              # Single notification
-│   │	│   │   │   ├── useNotificationTemplates.js
-│   │	│   │   │   ├── useNotificationHistory.js
-│   │	│   │   │   ├── useNotificationSettings.js
-│   │	│   │   │   ├── useUnreadNotifications.js
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── useNotifications.js                       
+│   │	│   │   │   ├── useUnreadNotifications.js 
+│   │   │   │   │   └── useNotificationPreference.js  
 │   │	│   │   ├── services/
-│   │	│   │   │   ├── notification.service.js
-│   │	│   │   │   ├── template.service.js
-│   │	│   │   │   ├── email.service.js
-│   │	│   │   │   ├── sms.service.js
-│   │	│   │   │   ├── push.service.js
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── utils/
-│   │	│   │   │   ├── notificationColumns.js
-│   │	│   │   │   ├── notificationConstants.js
-│   │	│   │   │   ├── notificationValidation.js
-│   │	│   │   │   ├── notificationFormatter.js
-│   │	│   │   │   ├── notificationHelper.js
-│   │   │   │   │   └── index.js
-│   │   │   │   └── styles/
-│   │	│   │       ├── Notification.css
-│   │	│   │       ├── NotificationTable.css
-│   │	│   │       ├── NotificationForm.css
-│   │   │   │       └── NotificationSettings.css
-│   │   │   ├── reports/
-│   │	│   │   ├── index.js                              # Public exports
-│   │	│   │   ├── pages/
-│   │	│   │   │   ├── Reports.jsx                    # Reports dashboard
-│   │	│   │   │   ├── DashboardReports.jsx           # Executive dashboard
-│   │	│   │   │   ├── PatientReports.jsx             # Patient analytics
-│   │	│   │   │   ├── DoctorReports.jsx              # Doctor analytics
-│   │	│   │   │   ├── AppointmentReports.jsx         # Appointment reports
-│   │	│   │   │   ├── PrescriptionReports.jsx        # Prescription reports
-│   │	│   │   │   ├── PharmacyReports.jsx            # Pharmacy reports
-│   │	│   │   │   ├── LaboratoryReports.jsx          # Laboratory reports
-│   │	│   │   │   ├── BillingReports.jsx             # Financial reports
-│   │	│   │   │   ├── RevenueReports.jsx             # Revenue analytics
-│   │	│   │   │   ├── AuditReports.jsx               # System audit reports
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── components/
-│   │	│   │   │   ├── ReportTable.jsx
-│   │	│   │   │   ├── ReportCard.jsx
-│   │	│   │   │   ├── ReportChart.jsx
-│   │	│   │   │   ├── ReportFilter.jsx
-│   │	│   │   │   ├── ReportSummary.jsx
-│   │	│   │   │   ├── ReportStatistics.jsx
-│   │	│   │   │   ├── DateRangePicker.jsx
-│   │	│   │   │   ├── ExportButton.jsx
-│   │	│   │   │   ├── ReportToolbar.jsx
-│   │	│   │   │   ├── KPIWidget.jsx
-│   │	│   │   │   ├── RevenueChart.jsx
-│   │	│   │   │   ├── PatientChart.jsx
-│   │	│   │   │   ├── AppointmentChart.jsx
-│   │	│   │   │   ├── DoctorChart.jsx
-│   │	│   │   │   ├── BillingChart.jsx
-│   │	│   │   │   ├── LaboratoryChart.jsx
-│   │	│   │   │   ├── PharmacyChart.jsx
-│   │	│   │   │   ├── DashboardCards.jsx
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── hooks/
-│   │	│   │   │   ├── useReports.js                  # Reports dashboard
-│   │	│   │   │   ├── usePatientReports.js
-│   │	│   │   │   ├── useDoctorReports.js
-│   │	│   │   │   ├── useAppointmentReports.js
-│   │	│   │   │   ├── usePrescriptionReports.js
-│   │	│   │   │   ├── usePharmacyReports.js
-│   │	│   │   │   ├── useLaboratoryReports.js
-│   │	│   │   │   ├── useBillingReports.js
-│   │	│   │   │   ├── useRevenueReports.js
-│   │	│   │   │   ├── useExportReport.js
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── services/
-│   │	│   │   │   ├── report.service.js
-│   │	│   │   │   ├── dashboard.service.js
-│   │	│   │   │   ├── analytics.service.js
-│   │	│   │   │   ├── export.service.js
-│   │   │   │   │   └── index.js
-│   │	│   │   ├── utils/
-│   │	│   │   │   ├── reportConstants.js
-│   │	│   │   │   ├── reportFormatter.js
-│   │	│   │   │   ├── reportHelper.js
-│   │	│   │   │   ├── chartOptions.js
-│   │	│   │   │   ├── exportHelper.js
-│   │	│   │   │   ├── reportValidation.js
-│   │   │   │   │   └── index.js
-│   │   │   │   └── styles/
-│   │	│   │       ├── Reports.css
-│   │	│   │       ├── Dashboard.css
-│   │	│   │       ├── Charts.css
-│   │   │   │       └── Export.css
+│   │   │   │   │   └── notificationService.js
+│   │   │   │   ├── validation/
+│   │   │   │   │   └── notificationSchema.js 
+│   │   │   │   ├── types/
+│   │   │   │   │   └── notificationTypes.js 
+│   │   │   │   └── index.js
+│   │   │   │      
 │   │   │   ├── settings/
-│   │	│   │   ├── index.js                              # Public exports
-│   │	│   │   ├── pages/
-│   │	│   │   │   ├── Settings.jsx                     # Settings dashboard
-│   │	│   │   │   ├── ProfileSettings.jsx              # User profile
-│   │	│   │   │   ├── AccountSettings.jsx              # Account settings
-│   │	│   │   │   ├── SecuritySettings.jsx             # Password, 2FA
-│   │	│   │   │   ├── RoleManagement.jsx               # Roles
-│   │	│   │   │   ├── PermissionManagement.jsx         # Permissions
-│   │	│   │   │   ├── UserManagement.jsx               # Users
-│   │	│   │   │   ├── DepartmentManagement.jsx         # Departments
-│   │	│   │   │   ├── NotificationSettings.jsx         # Notification preferences
-│   │	│   │   │   ├── SystemSettings.jsx               # Global system settings
-│   │	│   │   │   ├── IntegrationSettings.jsx          # Email, SMS, APIs
-│   │	│   │   │   ├── DatabaseSettings.jsx             # Database configuration
-│   │	│   │   │   ├── BackupRestore.jsx                # Backup & restore
-│   │	│   │   │   ├── AuditLogs.jsx                    # Audit logs
-│   │	│   │   │   ├── AppearanceSettings.jsx           # Theme, language
-│   │   │   │   │   └── index.js
 │   │	│   │   ├── components/
-│   │	│   │   │   ├── SettingsCard.jsx
-│   │	│   │   │   ├── SettingsMenu.jsx
-│   │	│   │   │   ├── SettingsSection.jsx
-│   │	│   │   │   ├── ProfileForm.jsx
-│   │	│   │   │   ├── AccountForm.jsx
-│   │	│   │   │   ├── PasswordForm.jsx
-│   │	│   │   │   ├── SecurityForm.jsx
-│   │	│   │   │   ├── UserTable.jsx
-│   │	│   │   │   ├── UserForm.jsx
-│   │	│   │   │   ├── RoleTable.jsx
-│   │	│   │   │   ├── RoleForm.jsx
-│   │	│   │   │   ├── PermissionTable.jsx
-│   │	│   │   │   ├── PermissionForm.jsx
-│   │	│   │   │   ├── DepartmentTable.jsx
-│   │	│   │   │   ├── DepartmentForm.jsx
-│   │	│   │   │   ├── NotificationSettingsForm.jsx
-│   │	│   │   │   ├── SystemSettingsForm.jsx
-│   │	│   │   │   ├── IntegrationForm.jsx
-│   │	│   │   │   ├── BackupTable.jsx
-│   │	│   │   │   ├── BackupForm.jsx
-│   │	│   │   │   ├── AuditLogTable.jsx
-│   │	│   │   │   ├── ThemeSelector.jsx
-│   │	│   │   │   ├── LanguageSelector.jsx 
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── SettingsLayout.jsx 
+│   │	│   │   │   ├── SettingsSidebar.jsx                      
+│   │	│   │   │   ├── SettingsHeader.jsx                     
+│   │	│   │   │   ├── SettingsSection.jsx  
+│   │	│   │   │   │
+│   │	│   │   │   ├── ProfileSettings.jsx 
+│   │	│   │   │   ├── AccountSettings.jsx                  
+│   │	│   │   │   ├── SecuritySettings.jsx
+│   │	│   │   │   ├── NotificationSettings.jsx 
+│   │	│   │   │   ├── AppearanceSettings.jsx 
+│   │	│   │   │   ├── LanguageSettings.jsx 
+│   │	│   │   │   ├── TimezoneSettings.jsx
+│   │	│   │   │   │
+│   │	│   │   │   ├── ClinicSettings.jsx 
+│   │	│   │   │   ├── AppointmentSettings.jsx 
+│   │	│   │   │   ├── BillingSettings.jsx 
+│   │	│   │   │   ├── LaboratorySettings.jsx 
+│   │	│   │   │   ├── UserRoleSettings.jsx
+│   │	│   │   │   │
+│   │	│   │   │   ├── PasswordChangeForm.jsx 
+│   │	│   │   │   ├── TwoFactorSettings.jsx 
+│   │   │   │   │   └── DangerZonze.jsx
+│   │	│   │   ├── pages/ 
+│   │	│   │   │   ├── SettingsPage.jsx 
+│   │	│   │   │   ├── ProfileSettingsPage.jsx
+│   │	│   │   │   ├── SecuritySettingsPage.jsx
+│   │	│   │   │   ├── NotificationSettingsPage.jsx
+│   │	│   │   │   ├── AppearanceSettingsPage.jsx 
+│   │	│   │   │   ├── ClinicSettingsPage.jsx 
+│   │   │   │   │   └── SystemSettingsPage.jsx 
 │   │	│   │   ├── hooks/
-│   │	│   │   │   ├── useSettings.js
-│   │	│   │   │   ├── useProfileSettings.js
-│   │	│   │   │   ├── useAccountSettings.js
-│   │	│   │   │   ├── useSecuritySettings.js
-│   │	│   │   │   ├── useUsers.js
-│   │	│   │   │   ├── useRoles.js
-│   │	│   │   │   ├── usePermissions.js
-│   │	│   │   │   ├── useDepartments.js
-│   │	│   │   │   ├── useSystemSettings.js
-│   │	│   │   │   ├── useNotificationSettings.js
-│   │	│   │   │   ├── useAuditLogs.js
-│   │	│   │   │   ├── useBackups.js
-│   │   │   │   │   └── index.js
+│   │	│   │   │   ├── useSettings.js                       
+│   │	│   │   │   ├── useProfileSettings.js 
+│   │   │   │   │   └── useSystemSettings.js  
 │   │	│   │   ├── services/
-│   │	│   │   │   ├── settings.service.js
-│   │	│   │   │   ├── profile.service.js
-│   │	│   │   │   ├── user.service.js
-│   │	│   │   │   ├── role.service.js
-│   │	│   │   │   ├── permission.service.js
-│   │	│   │   │   ├── department.service.js
-│   │	│   │   │   ├── security.service.js
-│   │	│   │   │   ├── notification.service.js
-│   │	│   │   │   ├── backup.service.js
-│   │	│   │   │   ├── audit.service.js
-│   │	│   │   │   ├── integration.service.js
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── utils/
-│   │	│   │   │   ├── settingsConstants.js
-│   │	│   │   │   ├── settingsValidation.js
-│   │	│   │   │   ├── settingsFormatter.js
-│   │	│   │   │   ├── permissionHelper.js
-│   │	│   │   │   ├── roleHelper.js
-│   │	│   │   │   ├── themeHelper.js
-│   │	│   │   │   ├── languageHelper.js
-│   │   │   │   │   └── index.js
-│   │   │   │   ├── store/
-│   │   │   │   │   └── 
-│   │   │   │   └── styles/
-│   │	│   │       ├── Settings.css
-│   │	│   │       ├── Profile.css
-│   │	│   │       ├── Security.css
-│   │	│   │       ├── Roles.css
-│   │	│   │       ├── Users.css
-│   │   │   │       └── System.css
+│   │   │   │   │   └── settingsService.js
+│   │   │   │   ├── validation/
+│   │	│   │   │   ├── profileSchema.js 
+│   │	│   │   │   ├── passwordSchema.js 
+│   │   │   │   │   └── settingsSchema.js 
+│   │   │   │   ├── types/
+│   │   │   │   │   └── setingsTypes.js 
+│   │   │   │   ├── types/
+│   │   │   │   │   └── setingsConstants.js 
+│   │   │   │   └── index.js
+│   │   │   │      
 │   │   │   └── errors/
-│   │	│       ├── 401.html
-│   │	│       ├── 403.html
-│   │	│       ├── 404.html
-│   │   │       └── 500.html
-│   │   ├── services/                                         # API Layer 
-│   │   │   ├── api.js   
-│   │   │   ├── axios.js 
-│   │   │   ├── interceptors.js           
-│   │   │   └── modules/
-│   │	│       ├── auth.service.js
-│   │	│       ├── patient.service.js
-│   │	│       ├── doctor.service.js
-│   │	│       ├── appointment.service.js
-│   │	│       ├── prescription.service.js
-│   │	│       ├── pharmacy.service.js
-│   │	│       ├── laboratory.service.js
-│   │	│       ├── billing.service.js
-│   │	│       ├── report.service.js 
-│   │   │       └── notification.service.js
-│   │   ├── state/
-│   │   │   ├── auth.store.js   
-│   │   │   ├── dashboard.store.js  
-│   │   │   ├── patient.store.js
-│   │   │   ├── doctor.store.js   
-│   │   │   ├── appointment.store.js 
-│   │   │   ├── billing.store.js 
-│   │   │   └── laboratory.store.js
 │   │   ├── hooks/
 │   │   │   ├── useAuth.js  
 │   │   │   ├── useApi.js   
 │   │   │   └── usePermission.js
-│   │   ├── guards/
-│   │   │   ├── auth.guard.js   
-│   │   │   └── role.guard.js
-│   │   ├── router/
-│   │   ├── utils/    
-│   │   │   ├── constants.js              
-│   │   │   ├── validations.js   
-│   │   │   ├── helpers.js  
-│   │   │   ├── storage.js   
-│   │   │   ├── date.js
-│   │   │   ├── formatter.js
-│   │   │   └── permission.js
+│   │   ├── services/                                         # API Layer 
+│   │   │       └── 
 │   │   ├── App.jsx
 │   │   └── main.jsx
 │   │     
@@ -793,7 +489,7 @@ Fullstack-Medical-Management System(MMS)  React => Features => Service(Axios) =>
 │   │   │   ├── permissions.py
 │   │   │   └── cache.py
 │   │   │
-│   │   ├── api/
+│   │   ├── api/                               # FastAPI
 │   │   │   ├── router.py                      # Register API versions
 │   │   │   └── v1/                            # API Router
 │   │	│       ├── auth.py                    
@@ -803,8 +499,20 @@ Fullstack-Medical-Management System(MMS)  React => Features => Service(Axios) =>
 │   │	│       ├── appointments.py
 │   │	│       ├── prescriptions.py
 │   │	│       ├── pharmacy.py
+│   │	│       ├── medicines.py 
+│   │	│       ├── inventory.py
+│   │	│       ├── suppliers.py 
+│   │	│       ├── dispensing.py
 │   │	│       ├── laboratory.py
+│   │	│       ├── lab_tests.py
+│   │	│       ├── lab_orders.py
+│   │	│       ├── lab_result.py
+│   │	│       ├── lab_reports.py
 │   │	│       ├── billing.py
+│   │	│       ├── invoices.py 
+│   │	│       ├── payments.py 
+│   │	│       ├── refunds.py 
+│   │	│       ├── insurance.py
 │   │	│       ├── notifications.py 
 │   │	│       ├── reports.py 
 │   │   │       └── settings.py
@@ -833,8 +541,20 @@ Fullstack-Medical-Management System(MMS)  React => Features => Service(Axios) =>
 │   │   │   ├── appointment_service.py 
 │   │   │   ├── prescription_service.py 
 │   │   │   ├── pharmacy_service.py
+│   │   │   ├── medicine_service.py
+│   │   │   ├── inventory_service.py
+│   │   │   ├── supplier_service.py
+│   │   │   ├── despensing_service.py
 │   │   │   ├── laboratory_service.py
+│   │   │   ├── lab_test_service.py 
+│   │   │   ├── lab_order_service.py 
+│   │   │   ├── lab_result_service.py 
+│   │   │   ├── lab_report_service.py
 │   │   │   ├── billing_service.py
+│   │   │   ├── invoice_service.py 
+│   │   │   ├── payment_service.py 
+│   │   │   ├── refund_service.py 
+│   │   │   ├── insurance_service.py
 │   │   │   ├── notification_service.py 
 │   │   │   ├── report_service.py
 │   │   │   ├── email_service.py
@@ -845,14 +565,24 @@ Fullstack-Medical-Management System(MMS)  React => Features => Service(Axios) =>
 │   │   ├── repositories/                      # Database Operations
 │   │   │   ├── __init__.py
 │   │   │   ├── base_repository.py 
+│   │   │   ├── auth_repository.py
 │   │   │   ├── user_repository.py
 │   │   │   ├── patient_repository.py 
 │   │   │   ├── doctor_repository.py
 │   │   │   ├── appointment_repository.py
 │   │   │   ├── prescription_repository.py
-│   │   │   ├── pharmacy_repository.py
-│   │   │   ├── laboratory_repository.py
-│   │   │   ├── billing_repository.py
+│   │   │   ├── medicine_repository.py
+│   │   │   ├── inventory_repository.py
+│   │   │   ├── supplier_repository.py
+│   │   │   ├── stock_repository.py
+│   │   │   ├── lab_test_repository.py
+│   │   │   ├── lab_order_repository.py
+│   │   │   ├── lab_result_repository.py
+│   │   │   ├── lab_report_repository.py
+│   │   │   ├── invoice_repository.py
+│   │   │   ├── payment_repository.py 
+│   │   │   ├── refund_repository.py
+│   │   │   ├── insurance_repository.py
 │   │   │   ├── notification_repository.py
 │   │   │   └── report_repository.py 
 │   │   │
@@ -862,13 +592,30 @@ Fullstack-Medical-Management System(MMS)  React => Features => Service(Axios) =>
 │   │   │   ├── user.py
 │   │   │   ├── role.py
 │   │   │   ├── permission.py
+│   │   │   ├── refresh_token.py
+│   │   │   ├── login_history.py
 │   │   │   ├── patient.py
 │   │   │   ├── doctor.py
 │   │   │   ├── appointment.py
-│   │   │   ├── prescription.py
-│   │   │   ├── pharmacy.py
-│   │   │   ├── laboratory.py
-│   │   │   ├── billing.py 
+│   │   │   ├── Prescription.py
+│   │   │   ├── PrescriptionItem.py
+│   │   │   ├── medicine.py 
+│   │   │   ├── medicineCategory.py 
+│   │   │   ├── Inventory.py 
+│   │   │   ├── StockMovement.py 
+│   │   │   ├── supplier.py 
+│   │   │   ├── LabTest.py
+│   │   │   ├── LabOrder.py 
+│   │   │   ├── LabOrderItem.py
+│   │   │   ├── Sample.py
+│   │   │   ├── LabResult.py 
+│   │   │   ├── LabReport.py
+│   │   │   ├── Invoice.py 
+│   │   │   ├── InvoiceItem.py 
+│   │   │   ├── Payment.py 
+│   │   │   ├── Transaction.py
+│   │   │   ├── Refund.py 
+│   │   │   ├── InsuranceClaim.py
 │   │   │   └── notification.py
 │   │   │  
 │   │   ├── middleware/
