@@ -79,9 +79,7 @@ const useMedicalRecords = (options = {}) => {
     setRecordError("");
   }, []);
 
-  /**
-   * Fetch all medical records.
-   */
+  /*Fetch all medical records. */
   const fetchRecords = useCallback(
     async (customFilters = filters) => {
       try {
@@ -126,9 +124,7 @@ const useMedicalRecords = (options = {}) => {
     [filters, patientId]
   );
 
-  /**
-   * Fetch a single medical record.
-   */
+  /* Fetch a single medical record. */
   const fetchRecord = useCallback(async (id) => {
     if (!id) {
       setRecord(null);
@@ -165,9 +161,7 @@ const useMedicalRecords = (options = {}) => {
     }
   }, []);
 
-  /**
-   * Apply filters and fetch records.
-   */
+  /* Apply filters and fetch records. */
   const applyFilters = useCallback(
     async (newFilters = {}) => {
       const updatedFilters = {
@@ -183,9 +177,7 @@ const useMedicalRecords = (options = {}) => {
     [filters, fetchRecords]
   );
 
-  /**
-   * Search records.
-   */
+  /* Search records. */
   const search = useCallback(
     async (searchTerm) => {
       return applyFilters({
@@ -195,9 +187,7 @@ const useMedicalRecords = (options = {}) => {
     [applyFilters]
   );
 
-  /**
-   * Reset all filters.
-   */
+  /* Reset all filters. */
   const resetFilters = useCallback(async () => {
     const resetFiltersValue = {
       ...DEFAULT_FILTERS,
@@ -208,9 +198,7 @@ const useMedicalRecords = (options = {}) => {
     return fetchRecords(resetFiltersValue);
   }, [fetchRecords]);
 
-  /**
-   * Create a medical record.
-   */
+  /* Create a medical record. */
   const addRecord = useCallback(async (data) => {
     try {
       setSaving(true);
@@ -246,9 +234,7 @@ const useMedicalRecords = (options = {}) => {
     }
   }, []);
 
-  /**
-   * Update a medical record.
-   */
+  /* Update a medical record. */
   const editRecord = useCallback(
     async (id, data) => {
       try {
@@ -300,9 +286,7 @@ const useMedicalRecords = (options = {}) => {
     []
   );
 
-  /**
-   * Delete a medical record.
-   */
+  /* Delete a medical record. */
   const removeRecord = useCallback(async (id) => {
     if (!id) {
       return false;
@@ -342,16 +326,12 @@ const useMedicalRecords = (options = {}) => {
     }
   }, []);
 
-  /**
-   * Refresh records using the current filters.
-   */
+  /* Refresh records using the current filters. */
   const refresh = useCallback(() => {
     return fetchRecords(filters);
   }, [fetchRecords, filters]);
 
-  /**
-   * Automatically fetch records on mount.
-   */
+  /* Automatically fetch records on mount.*/
   useEffect(() => {
     if (!autoFetch) {
       return;
