@@ -6,9 +6,7 @@ import axios from "axios";
 
 const API_URL = "/api/medical-records";
 
-/**
- * Extract API error message.
- */
+/* Extract API error message. */
 const getErrorMessage = (error) => {
   return (
     error?.response?.data?.message ||
@@ -47,9 +45,7 @@ export const getMedicalRecords = async (filters = {}) => {
   }
 };
 
-/**
- * Get a single medical record by ID.
- */
+/* Get a single medical record by ID. */
 export const getMedicalRecord = async (id) => {
   if (!id) {
     throw new Error("Medical record ID is required.");
@@ -68,9 +64,7 @@ export const getMedicalRecord = async (id) => {
   }
 };
 
-/**
- * Get all medical records for a patient.
- */
+/* Get all medical records for a patient. */
 export const getPatientMedicalHistory = async (
   patientId,
   filters = {}
@@ -95,9 +89,7 @@ export const getPatientMedicalHistory = async (
   }
 };
 
-/**
- * Create a medical record.
- */
+/* Create a medical record. */
 export const createMedicalRecord = async (data) => {
   if (!data) {
     throw new Error(
@@ -119,9 +111,7 @@ export const createMedicalRecord = async (data) => {
   }
 };
 
-/**
- * Update a medical record.
- */
+/* Update a medical record. */
 export const updateMedicalRecord = async (
   id,
   data
@@ -150,9 +140,7 @@ export const updateMedicalRecord = async (
   }
 };
 
-/**
- * Partially update a medical record.
- */
+/* Partially update a medical record. */
 export const patchMedicalRecord = async (
   id,
   data
@@ -181,9 +169,7 @@ export const patchMedicalRecord = async (
   }
 };
 
-/**
- * Delete a medical record.
- */
+/* Delete a medical record. */
 export const deleteMedicalRecord = async (id) => {
   if (!id) {
     throw new Error("Medical record ID is required.");
@@ -202,9 +188,7 @@ export const deleteMedicalRecord = async (id) => {
   }
 };
 
-/**
- * Search medical records.
- */
+/*Search medical records. */
 export const searchMedicalRecords = async (
   search,
   filters = {}
@@ -225,9 +209,7 @@ export const searchMedicalRecords = async (
   }
 };
 
-/**
- * Get records by doctor.
- */
+/*Get records by doctor. */
 export const getDoctorMedicalRecords = async (
   doctorId,
   filters = {}
@@ -252,9 +234,7 @@ export const getDoctorMedicalRecords = async (
   }
 };
 
-/**
- * Get records by diagnosis.
- */
+/* Get records by diagnosis. */
 export const getMedicalRecordsByDiagnosis =
   async (diagnosis, filters = {}) => {
     if (!diagnosis?.trim()) {
@@ -277,9 +257,7 @@ export const getMedicalRecordsByDiagnosis =
     }
   };
 
-/**
- * Get records within a date range.
- */
+/* Get records within a date range. */
 export const getMedicalRecordsByDateRange = async (
   dateFrom,
   dateTo,
