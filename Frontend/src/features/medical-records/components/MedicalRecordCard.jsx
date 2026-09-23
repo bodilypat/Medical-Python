@@ -1,5 +1,5 @@
 /* *************************************************** */
-/* #src/features/medical-records/MedicalRecordCard.jsx */
+/* File: #src/features/medical-records/MedicalRecordCard.jsx */
 /* *************************************************** */
 
 import { Link } from "react-router-dom";

@@ -1,6 +1,6 @@
-/* ***************************************************************** */
-/* #src/features/medical-records/components/MedicalRecordDetails.jsx */ 
-/* ***************************************************************** */
+/* *********************************************************************** */
+/* File: #src/features/medical-records/components/MedicalRecordDetails.jsx */ 
+/* *********************************************************************** */
 
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
