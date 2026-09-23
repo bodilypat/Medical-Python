@@ -9,9 +9,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 
-/* --------------------------------------------------------- */
-/* Constants                                                  */
-/* --------------------------------------------------------- */
+/* Constants */
 
 const DEFAULT_ITEM = {
   description: "",
@@ -77,9 +75,7 @@ const CURRENCIES = [
 const MAX_NOTES_LENGTH = 2000;
 const MAX_ITEM_DESCRIPTION_LENGTH = 500;
 
-/* --------------------------------------------------------- */
-/* Helpers                                                    */
-/* --------------------------------------------------------- */
+/* Helpers */
 
 const getPatientName = (patient) => {
   if (!patient) {
@@ -301,9 +297,7 @@ const calculateItemTotals = (
   };
 };
 
-/* --------------------------------------------------------- */
-/* Component                                                   */
-/* --------------------------------------------------------- */
+/* Component */
 
 const BillingForm = ({
   billing = null,
@@ -329,9 +323,7 @@ const BillingForm = ({
   const [submitError, setSubmitError] =
     useState("");
 
-  /* ------------------------------------------------------- */
-  /* Initialize                                               */
-  /* ------------------------------------------------------- */
+  /* Initialize */
 
   useEffect(() => {
     setFormData(
@@ -341,9 +333,7 @@ const BillingForm = ({
     setSubmitError("");
   }, [billing]);
 
-  /* ------------------------------------------------------- */
-  /* Totals                                                   */
-  /* ------------------------------------------------------- */
+  /* Totals */
 
   const totals = useMemo(() => {
     return formData.items.reduce(
@@ -381,9 +371,7 @@ const BillingForm = ({
     );
   }, [formData.items]);
 
-  /* ------------------------------------------------------- */
-  /* Change handlers                                          */
-  /* ------------------------------------------------------- */
+  /* Change handlers */
 
   const clearFieldError = (
     field
@@ -425,9 +413,7 @@ const BillingForm = ({
     }
   };
 
-  /* ------------------------------------------------------- */
   /* Item handlers                                            */
-  /* ------------------------------------------------------- */
 
   const handleItemChange = (
     index,
@@ -533,9 +519,7 @@ const BillingForm = ({
     });
   };
 
-  /* ------------------------------------------------------- */
-  /* Validation                                               */
-  /* ------------------------------------------------------- */
+  /* Validation */  
 
   const validate = () => {
     const validationErrors =
@@ -681,9 +665,7 @@ const BillingForm = ({
     );
   };
 
-  /* ------------------------------------------------------- */
-  /* Submit                                                   */
-  /* ------------------------------------------------------- */
+  /* Submit */
 
   const handleSubmit = async (
     event
@@ -756,9 +738,7 @@ const BillingForm = ({
     }
   };
 
-  /* ------------------------------------------------------- */
-  /* Cancel                                                   */
-  /* ------------------------------------------------------- */
+  /* Cancel */
 
   const handleCancel = () => {
     if (onCancel) {
@@ -769,9 +749,7 @@ const BillingForm = ({
     navigate("/billing");
   };
 
-  /* ------------------------------------------------------- */
-  /* Render                                                    */
-  /* ------------------------------------------------------- */
+  /* Render */
 
   return (
     <form
@@ -779,9 +757,7 @@ const BillingForm = ({
       onSubmit={handleSubmit}
       noValidate
     >
-      {/* ------------------------------------------------- */}
-      {/* Header                                             */}
-      {/* ------------------------------------------------- */}
+      {/* Header */}
 
       <div className="form-header">
         <div>
@@ -799,9 +775,7 @@ const BillingForm = ({
         </div>
       </div>
 
-      {/* ------------------------------------------------- */}
       {/* Error                                               */}
-      {/* ------------------------------------------------- */}
 
       {submitError && (
         <div
@@ -812,9 +786,7 @@ const BillingForm = ({
         </div>
       )}
 
-      {/* ------------------------------------------------- */}
-      {/* Billing Information                               */}
-      {/* ------------------------------------------------- */}
+      {/* Billing Information */}
 
       <section className="form-section">
         <div className="form-section-header">
@@ -1051,9 +1023,7 @@ const BillingForm = ({
         </div>
       </section>
 
-      {/* ------------------------------------------------- */}
-      {/* Line Items                                         */}
-      {/* ------------------------------------------------- */}
+      {/* Line Items */}
 
       <section className="form-section">
         <div className="form-section-header form-section-header-row">
@@ -1430,9 +1400,7 @@ const BillingForm = ({
         </div>
       </section>
 
-      {/* ------------------------------------------------- */}
-      {/* Notes                                              */}
-      {/* ------------------------------------------------- */}
+      {/* Notes */}
 
       <section className="form-section">
         <div className="form-section-header">
@@ -1486,9 +1454,7 @@ const BillingForm = ({
         </div>
       </section>
 
-      {/* ------------------------------------------------- */}
-      {/* Summary                                            */}
-      {/* ------------------------------------------------- */}
+      {/* Summary */}
 
       <section className="billing-summary">
         <div className="billing-summary-row">
@@ -1537,9 +1503,7 @@ const BillingForm = ({
         </div>
       </section>
 
-      {/* ------------------------------------------------- */}
-      {/* Actions                                            */}
-      {/* ------------------------------------------------- */}
+      {/* Actions */}
 
       <div className="form-actions">
         <button
